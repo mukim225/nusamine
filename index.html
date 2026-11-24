@@ -1,0 +1,2551 @@
+<!DOCTYPE html>
+<html lang="id" class="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>NusaMine — Cloud Mining & Reward Web3</title>
+
+  <!-- Google Fonts: Plus Jakarta Sans & JetBrains Mono -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['"Plus Jakarta Sans"', 'system-ui', 'sans-serif'],
+            mono: ['"JetBrains Mono"', 'monospace'],
+          },
+          colors: {
+            obsidian: '#090D16',
+            emerald: {
+              DEFAULT: '#10B981',
+              400: '#34D399',
+              500: '#10B981',
+              600: '#059669',
+            },
+            cyan: {
+              DEFAULT: '#06B6D4',
+              400: '#22D3EE',
+              500: '#06B6D4',
+            },
+            indigo: {
+              DEFAULT: '#6366F1',
+              400: '#818CF8',
+              500: '#6366F1',
+            }
+          }
+        }
+      }
+    };
+  </script>
+
+  <!-- Lucide Icons CDN -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+
+  <!-- =====================================================================
+       [SLOT MONETISASI HEAD — TEMPEL KODE POPUNDER / SOCIAL BAR DI SINI]
+       Contoh: Adsterra Social Bar, Monetag Vignette, atau Google AdSense Auto Ads
+  ====================================================================== -->
+
+  <style>
+    :root {
+      --bg-obsidian: #090D16;
+      --accent-emerald: #10B981;
+      --accent-cyan: #06B6D4;
+      --accent-indigo: #6366F1;
+    }
+
+    body {
+      background-color: var(--bg-obsidian);
+      color: #F8FAFC;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      overflow-x: hidden;
+      background-image:
+        radial-gradient(circle at 12% 8%, rgba(16, 185, 129, 0.14), transparent 38%),
+        radial-gradient(circle at 88% 15%, rgba(6, 182, 212, 0.14), transparent 40%),
+        radial-gradient(circle at 50% 92%, rgba(99, 102, 241, 0.14), transparent 42%);
+    }
+
+    .glass-card {
+      background: rgba(14, 21, 38, 0.76);
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
+      border: 1px solid rgba(255, 255, 255, 0.09);
+      box-shadow: 0 20px 45px -15px rgba(0, 0, 0, 0.75), inset 0 1px 0 0 rgba(255, 255, 255, 0.08);
+    }
+
+    .glass-inner {
+      background: rgba(8, 12, 22, 0.68);
+      border: 1px solid rgba(255, 255, 255, 0.07);
+    }
+
+    .btn-primary-gradient {
+      background: linear-gradient(135deg, #10B981 0%, #06B6D4 55%, #6366F1 100%);
+      background-size: 160% 160%;
+      transition: all 0.25s ease;
+    }
+    .btn-primary-gradient:hover:not(:disabled) {
+      background-position: right center;
+      box-shadow: 0 8px 26px -4px rgba(6, 182, 212, 0.42);
+      transform: translateY(-1px);
+    }
+    .btn-primary-gradient:active:not(:disabled) {
+      transform: translateY(0px);
+    }
+    .btn-primary-gradient:disabled {
+      opacity: 0.45;
+      cursor: not-allowed;
+    }
+
+    .btn-ad-boost {
+      background: linear-gradient(135deg, #06B6D4 0%, #6366F1 100%);
+      transition: all 0.25s ease;
+    }
+    .btn-ad-boost:hover:not(:disabled) {
+      filter: brightness(1.1);
+      box-shadow: 0 8px 25px -4px rgba(99, 102, 241, 0.48);
+      transform: translateY(-1px);
+    }
+    .btn-ad-boost:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
+    /* Animasi Reaktor Tambang SVG */
+    @keyframes spinClockwise {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
+    }
+    @keyframes spinCounterClockwise {
+      from { transform: rotate(360deg); }
+      to { transform: rotate(0deg); }
+    }
+    @keyframes corePulse {
+      0%, 100% { transform: scale(1); opacity: 0.94; }
+      50% { transform: scale(1.06); opacity: 1; }
+    }
+
+    .reactor-ring-outer {
+      animation: spinClockwise 14s linear infinite;
+      transform-origin: center;
+    }
+    .reactor-ring-inner {
+      animation: spinCounterClockwise 9s linear infinite;
+      transform-origin: center;
+    }
+    .reactor-core-active {
+      animation: corePulse 2.2s ease-in-out infinite;
+      transform-origin: center;
+    }
+    .reactor-paused {
+      animation-play-state: paused !important;
+      opacity: 0.42;
+    }
+
+    /* Hilangkan panah spinner pada input angka */
+    input[type="number"]::-webkit-inner-spin-button,
+    input[type="number"]::-webkit-outer-spin-button {
+      -webkit-appearance: none;
+      margin: 0;
+    }
+    input[type="number"] {
+      -moz-appearance: textfield;
+    }
+
+    .pb-safe {
+      padding-bottom: max(0.65rem, env(safe-area-inset-bottom));
+    }
+  </style>
+</head>
+<body class="min-h-screen flex flex-col justify-between selection:bg-emerald-500/30 selection:text-emerald-200">
+
+  <!-- =====================================================================
+       BANNER STATUS MODE PREVIEW LOKAL (MUNCUL JIKA FIREBASE BELUM DIISI)
+  ====================================================================== -->
+  <div id="previewModeTopBanner" class="hidden bg-gradient-to-r from-indigo-600/90 via-cyan-600/90 to-emerald-600/90 text-white px-4 py-2 text-center text-[11px] sm:text-xs font-medium border-b border-white/15">
+    <span class="font-extrabold">Mode Preview Lokal Aktif:</span> Isi <code class="font-mono bg-black/30 px-1.5 py-0.5 rounded">FIREBASE_CONFIG</code> di bagian atas file <code class="font-mono bg-black/30 px-1.5 py-0.5 rounded">index.html</code> untuk mengaktifkan Login Google & Cloud Database nyata.
+  </div>
+
+  <!-- =====================================================================
+       LAYAR LOGIN & REGISTRASI (TAMPIL SAAT USER BELUM MASUK)
+  ====================================================================== -->
+  <div id="authScreen" class="flex-1 flex items-center justify-center px-4 py-8">
+    <div class="max-w-md w-full glass-card rounded-3xl p-6 sm:p-7 space-y-6 border border-white/10 relative overflow-hidden">
+      <!-- Ambient Glow -->
+      <div class="absolute -top-20 -right-20 w-48 h-48 rounded-full bg-emerald-500/15 blur-3xl pointer-events-none"></div>
+      <div class="absolute -bottom-20 -left-20 w-48 h-48 rounded-full bg-indigo-500/20 blur-3xl pointer-events-none"></div>
+
+      <!-- Brand Header -->
+      <div class="text-center space-y-2.5">
+        <div class="w-16 h-16 mx-auto rounded-2xl bg-gradient-to-br from-emerald-400 via-cyan-400 to-indigo-500 p-[2px] shadow-xl shadow-cyan-500/20">
+          <div class="w-full h-full bg-[#090D16] rounded-[14px] flex items-center justify-center">
+            <i data-lucide="cpu" class="w-8 h-8 text-emerald-400"></i>
+          </div>
+        </div>
+        <div>
+          <span class="px-2.5 py-0.5 rounded-full text-[10px] font-mono font-bold uppercase tracking-wider bg-emerald-500/15 text-emerald-300 border border-emerald-500/30">
+            Web3 Cloud Mining v3.0
+          </span>
+          <h1 class="text-2xl font-extrabold text-white tracking-tight mt-2">NusaMine</h1>
+          <p class="text-xs text-slate-400 mt-1 leading-relaxed">
+            Tambang koin NUSA berbasis cloud server anti-cheat dan tukarkan langsung ke Saldo DANA atau dompet Web3 Anda.
+          </p>
+        </div>
+      </div>
+
+      <!-- Tombol Login Google -->
+      <button type="button" id="googleLoginBtn"
+        class="w-full py-3.5 px-4 rounded-2xl bg-white hover:bg-slate-100 text-slate-900 font-bold text-xs sm:text-sm shadow-lg flex items-center justify-center gap-3 transition">
+        <!-- SVG Logo Google -->
+        <svg class="w-5 h-5" viewBox="0 0 24 24">
+          <path fill="#4285F4" d="M23.745 12.27c0-.7-.06-1.4-.19-2.07H12v4.51h6.6c-.29 1.52-1.14 2.82-2.4 3.68v3.05h3.88c2.27-2.09 3.665-5.17 3.665-9.17z"/>
+          <path fill="#34A853" d="M12 24c3.24 0 5.95-1.08 7.93-2.91l-3.88-3.05c-1.08.72-2.45 1.16-4.05 1.16-3.12 0-5.77-2.11-6.72-4.96H1.29v3.14C3.26 21.3 7.31 24 12 24z"/>
+          <path fill="#FBBC05" d="M5.28 14.24c-.24-.72-.38-1.49-.38-2.24s.14-1.52.38-2.24V6.62H1.29C.47 8.24 0 10.06 0 12s.47 3.76 1.29 5.38l3.99-3.14z"/>
+          <path fill="#EA4335" d="M12 4.75c1.77 0 3.35.61 4.6 1.8l3.42-3.42C17.95 1.19 15.24 0 12 0 7.31 0 3.26 2.7 1.29 6.62l3.99 3.14c.95-2.85 3.6-4.96 6.72-4.96z"/>
+        </svg>
+        <span>Masuk dengan Google</span>
+      </button>
+
+      <!-- Pemisah -->
+      <div class="relative flex items-center justify-center">
+        <div class="border-t border-white/10 w-full"></div>
+        <span class="bg-[#0E1526] px-3 text-[11px] text-slate-400 uppercase font-mono">atau email</span>
+        <div class="border-t border-white/10 w-full"></div>
+      </div>
+
+      <!-- Toggle Login / Daftar Email -->
+      <div class="space-y-3">
+        <div class="grid grid-cols-2 gap-1 p-1 rounded-xl bg-slate-950/80 border border-white/10 text-xs font-bold">
+          <button type="button" id="authTabLogin" class="py-2 rounded-lg bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 transition">
+            Masuk Akun
+          </button>
+          <button type="button" id="authTabRegister" class="py-2 rounded-lg text-slate-400 hover:text-white transition">
+            Daftar Baru
+          </button>
+        </div>
+
+        <form id="emailAuthForm" class="space-y-3">
+          <div id="registerNameGroup" class="hidden">
+            <label for="authNameInput" class="block text-[11px] font-semibold text-slate-300 mb-1">Nama Tampilan</label>
+            <input id="authNameInput" type="text" placeholder="Contoh: Budi Santoso"
+              class="w-full glass-inner rounded-xl px-3.5 py-2.5 text-sm text-white placeholder-slate-500 focus:outline-none focus:border-emerald-400" />
+          </div>
+
+          <div>
+            <label for="authEmailInput" class="block text-[11px] font-semibold text-slate-300 mb-1">Alamat Email</label>
+            <input id="authEmailInput" type="email" required placeholder="nama@email.com"
+              class="w-full glass-inner rounded-xl px-3.5 py-2.5 text-sm text-white placeholder-slate-500 focus:outline-none focus:border-cyan-400" />
+          </div>
+
+          <div>
+            <label for="authPasswordInput" class="block text-[11px] font-semibold text-slate-300 mb-1">Kata Sandi (Min. 6 Karakter)</label>
+            <input id="authPasswordInput" type="password" required minlength="6" placeholder="••••••••"
+              class="w-full glass-inner rounded-xl px-3.5 py-2.5 text-sm text-white placeholder-slate-500 focus:outline-none focus:border-cyan-400" />
+          </div>
+
+          <button type="submit" id="emailAuthSubmitBtn"
+            class="w-full btn-primary-gradient py-3 px-4 rounded-xl font-extrabold text-xs sm:text-sm text-slate-950 shadow-lg">
+            Masuk dengan Email
+          </button>
+        </form>
+      </div>
+
+      <!-- Tombol Mode Preview Lokal (Tanpa Login) -->
+      <div class="pt-2 border-t border-white/10">
+        <button type="button" id="enterPreviewModeBtn"
+          class="w-full py-3 px-4 rounded-xl bg-indigo-500/15 hover:bg-indigo-500/25 text-indigo-300 border border-indigo-500/35 font-bold text-xs flex items-center justify-center gap-2 transition">
+          <i data-lucide="play" class="w-4 h-4"></i>
+          <span>Coba Mode Preview (Tanpa Login)</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- =====================================================================
+       APLIKASI UTAMA (TAMPIL SETELAH LOGIN ATAU MASUK MODE PREVIEW)
+  ====================================================================== -->
+  <div id="mainAppWrapper" class="hidden flex-1 flex flex-col justify-between">
+
+    <!-- HEADER PROFIL & STATUS CLOUD -->
+    <header class="sticky top-0 z-30 glass-card border-x-0 border-t-0">
+      <div class="max-w-xl mx-auto px-4 h-16 flex items-center justify-between gap-2">
+        <!-- Profil User -->
+        <div class="flex items-center gap-2.5 min-w-0">
+          <div id="userAvatarBox" class="w-9 h-9 rounded-xl bg-gradient-to-br from-emerald-400 via-cyan-400 to-indigo-500 p-[1.5px] shrink-0">
+            <div id="userAvatarInner" class="w-full h-full bg-[#090D16] rounded-[10px] flex items-center justify-center font-extrabold text-xs text-emerald-300 overflow-hidden">
+              NM
+            </div>
+          </div>
+          <div class="min-w-0">
+            <div class="flex items-center gap-1.5">
+              <span id="headerUserName" class="font-bold text-xs sm:text-sm text-white truncate">Penambang Nusa</span>
+            </div>
+            <div class="flex items-center gap-1.5 mt-0.5">
+              <span id="cloudStatusDot" class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span>
+              <span id="cloudStatusBadge" class="font-mono text-[10px] text-emerald-300 truncate">Cloud Terhubung</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Saldo Cepat & Tombol Keluar -->
+        <div class="flex items-center gap-2 shrink-0">
+          <button type="button" data-nav="wallet" class="nav-jump-btn glass-inner px-2.5 py-1.5 rounded-xl text-right hover:border-emerald-500/40 transition">
+            <div id="headerNusaBalance" class="font-mono text-xs font-bold text-emerald-400 leading-tight">0.0000 NUSA</div>
+            <div id="headerIdrBalance" class="font-mono text-[10px] text-slate-400 leading-tight">≈ Rp 0</div>
+          </button>
+
+          <button type="button" id="logoutBtn" title="Keluar Akun"
+            class="p-2.5 rounded-xl glass-inner hover:bg-rose-500/20 text-slate-400 hover:text-rose-400 border border-white/10 transition">
+            <i data-lucide="log-out" class="w-4 h-4"></i>
+          </button>
+        </div>
+      </div>
+    </header>
+
+    <!-- KONTEN UTAMA 4 TAB -->
+    <main class="flex-1 max-w-xl w-full mx-auto px-4 pt-4 pb-28 space-y-4">
+
+      <!-- =================================================================
+           TAB 1: TAMBANG (MINING DASHBOARD)
+      ================================================================== -->
+      <section id="panel-mining" class="tab-panel space-y-4">
+
+        <!-- Bar Status Sesi & Anti-Cheat Timestamp -->
+        <div class="glass-card rounded-2xl p-3.5 flex items-center justify-between gap-3">
+          <div class="flex items-center gap-2.5">
+            <span id="miningStatusDot" class="w-2.5 h-2.5 rounded-full bg-slate-500"></span>
+            <div>
+              <div class="flex items-center gap-1.5">
+                <span id="miningStatusLabel" class="text-xs font-extrabold uppercase tracking-wider text-slate-300">STANDBY</span>
+                <span id="adBoostCountBadge" class="hidden px-2 py-0.5 rounded-full text-[10px] font-mono font-bold bg-indigo-500/20 text-indigo-300 border border-indigo-500/40">
+                  +0 GH/s Boost
+                </span>
+              </div>
+              <p class="text-[11px] text-slate-400 mt-0.5 flex items-center gap-1">
+                <i data-lucide="shield-check" class="w-3 h-3 text-emerald-400"></i>
+                <span>Anti-Cheat Timestamp Aktif</span>
+              </p>
+            </div>
+          </div>
+
+          <div class="text-right glass-inner px-3 py-1.5 rounded-xl">
+            <div class="text-[10px] text-slate-400">Hitung Mundur 4 Jam</div>
+            <div id="sessionTimerDisplay" class="font-mono text-sm font-bold text-cyan-300">04:00:00</div>
+          </div>
+        </div>
+
+        <!-- Kartu Reaktor Utama & Saldo Live -->
+        <div class="glass-card rounded-3xl p-5 text-center relative overflow-hidden">
+          <div class="absolute -top-16 left-1/2 -translate-x-1/2 w-56 h-32 bg-emerald-500/15 blur-3xl pointer-events-none"></div>
+
+          <!-- Reaktor SVG Beranimasi -->
+          <div class="relative w-44 h-44 mx-auto my-1 flex items-center justify-center">
+            <svg viewBox="0 0 200 200" class="w-full h-full">
+              <defs>
+                <linearGradient id="nusaReactorGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                  <stop offset="0%" stop-color="#10B981" />
+                  <stop offset="50%" stop-color="#06B6D4" />
+                  <stop offset="100%" stop-color="#6366F1" />
+                </linearGradient>
+                <radialGradient id="nusaCoreGlow" cx="50%" cy="50%" r="50%">
+                  <stop offset="0%" stop-color="#10B981" stop-opacity="0.45" />
+                  <stop offset="65%" stop-color="#6366F1" stop-opacity="0.16" />
+                  <stop offset="100%" stop-color="#090D16" stop-opacity="0" />
+                </radialGradient>
+              </defs>
+
+              <circle cx="100" cy="100" r="88" fill="url(#nusaCoreGlow)" />
+
+              <g id="reactorOuterRing" class="reactor-ring-outer reactor-paused">
+                <circle cx="100" cy="100" r="84" fill="none" stroke="url(#nusaReactorGrad)" stroke-width="2" stroke-dasharray="18 10 4 10" />
+                <circle cx="100" cy="16" r="4" fill="#10B981" />
+                <circle cx="100" cy="184" r="4" fill="#6366F1" />
+              </g>
+
+              <g id="reactorInnerRing" class="reactor-ring-inner reactor-paused">
+                <circle cx="100" cy="100" r="65" fill="none" stroke="#06B6D4" stroke-opacity="0.45" stroke-width="1.5" stroke-dasharray="8 8" />
+                <polygon points="100,44 148,128 52,128" fill="none" stroke="#10B981" stroke-opacity="0.3" stroke-width="1.2" />
+              </g>
+
+              <g id="reactorCoreGroup" class="reactor-core-active reactor-paused">
+                <polygon points="100,56 138,78 138,122 100,144 62,122 62,78" fill="#0B1221" stroke="url(#nusaReactorGrad)" stroke-width="2.5" />
+                <text x="100" y="95" text-anchor="middle" fill="#34D399" font-family="JetBrains Mono, monospace" font-size="10" font-weight="700">TOTAL SPEED</text>
+                <text id="reactorHashrateSvgText" x="100" y="114" text-anchor="middle" fill="#FFFFFF" font-family="JetBrains Mono, monospace" font-size="14" font-weight="800">25.0 GH/s</text>
+              </g>
+            </svg>
+          </div>
+
+          <!-- Penghitung Saldo Real-Time -->
+          <div class="mt-1">
+            <div class="text-[11px] uppercase tracking-widest text-slate-400 font-semibold">Total Saldo NUSA (Tersimpan + Sesi Berjalan)</div>
+            <div class="flex items-baseline justify-center gap-1.5 mt-1">
+              <span id="liveNusaCounter" class="font-mono text-3xl sm:text-4xl font-extrabold tracking-tight text-white">
+                0.000000
+              </span>
+              <span class="font-mono text-sm font-bold text-emerald-400">NUSA</span>
+            </div>
+
+            <!-- Konversi Live ke Rupiah & USDT -->
+            <div class="flex flex-wrap items-center justify-center gap-2 mt-2.5">
+              <span id="liveIdrEstimate" class="font-mono text-xs font-bold px-3 py-1 rounded-full bg-emerald-500/15 text-emerald-300 border border-emerald-500/30">
+                ≈ Rp 0
+              </span>
+              <span id="liveUsdtEstimate" class="font-mono text-xs font-semibold px-3 py-1 rounded-full bg-cyan-500/15 text-cyan-300 border border-cyan-500/30">
+                ≈ $0.0000 USDT
+              </span>
+            </div>
+          </div>
+
+          <!-- Statistik Detail Sesi Tambang -->
+          <div class="grid grid-cols-3 gap-2 mt-5 pt-4 border-t border-white/10 text-left">
+            <div class="glass-inner rounded-xl p-2.5">
+              <div class="text-[10px] text-slate-400">Rig Permanen</div>
+              <div id="statBaseHashrate" class="font-mono text-xs font-bold text-white mt-0.5">25.0 GH/s</div>
+            </div>
+            <div class="glass-inner rounded-xl p-2.5">
+              <div class="text-[10px] text-indigo-300">Sesi Berjalan</div>
+              <div id="statSessionAccrued" class="font-mono text-xs font-bold text-cyan-300 mt-0.5">+0.0000</div>
+            </div>
+            <div class="glass-inner rounded-xl p-2.5">
+              <div class="text-[10px] text-emerald-300">Yield / Jam</div>
+              <div id="statHourlyRate" class="font-mono text-xs font-bold text-emerald-400 mt-0.5">+10.00 NUSA</div>
+            </div>
+          </div>
+
+          <!-- Tombol Aksi Utama Tambang & Monetisasi -->
+          <div class="mt-4 space-y-2.5">
+            <!-- Tombol Mulai Tambang / Klaim Hasil -->
+            <button type="button" id="mainMiningActionBtn"
+              class="w-full btn-primary-gradient py-3.5 px-4 rounded-2xl font-extrabold text-xs sm:text-sm text-slate-950 shadow-lg flex items-center justify-center gap-2">
+              <i data-lucide="zap" class="w-4 h-4"></i>
+              <span id="mainMiningActionText">Mulai Tambang 4 Jam</span>
+            </button>
+
+            <!-- Tombol Monetisasi Iklan Direct Link / Rewarded Ad -->
+            <button type="button" id="watchAdBoostBtn"
+              class="w-full btn-ad-boost py-3.5 px-4 rounded-2xl font-extrabold text-xs sm:text-sm text-white shadow-lg flex items-center justify-center gap-2">
+              <i data-lucide="play-circle" class="w-5 h-5 text-cyan-200"></i>
+              <span id="watchAdBoostText">Boost +50 GH/s & +15 NUSA (Tonton Iklan)</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- =================================================================
+             SLOT BANNER IKLAN RESPONSIF 320x50 (#ad-banner-slot)
+             Tempel kode script Banner Adsterra / Monetag / AdSense di dalam div ini
+        ================================================================== -->
+        <div id="ad-banner-slot" class="glass-card rounded-2xl p-3 border border-dashed border-indigo-500/40">
+          <div class="flex items-center justify-between text-[9px] font-mono uppercase tracking-wider text-slate-400 mb-1.5">
+            <span class="px-1.5 py-0.5 rounded bg-indigo-500/20 text-indigo-300 border border-indigo-500/30">Slot Banner Iklan 320x50</span>
+            <span>#ad-banner-slot</span>
+          </div>
+
+          <!-- Placeholder Visual Iklan (Ganti blok ini dengan skrip banner iklan asli Anda) -->
+          <div id="bannerAdFallbackCard" class="cursor-pointer rounded-xl bg-gradient-to-r from-slate-900 via-indigo-950/60 to-slate-900 border border-white/10 p-2.5 flex items-center justify-between gap-2.5 hover:border-cyan-400/40 transition">
+            <div class="flex items-center gap-2.5 min-w-0">
+              <div class="w-9 h-9 rounded-lg bg-cyan-500/20 border border-cyan-400/30 flex items-center justify-center text-cyan-300 shrink-0">
+                <i data-lucide="megaphone" class="w-4 h-4"></i>
+              </div>
+              <div class="min-w-0">
+                <div class="text-xs font-bold text-white truncate">Pasang Skrip Banner Adsterra / Monetag di Sini</div>
+                <div class="text-[10px] text-slate-400 truncate">Klik area ini untuk uji hitung impresi di Panel Owner</div>
+              </div>
+            </div>
+            <span class="px-2 py-1 rounded-lg bg-emerald-500/20 text-emerald-300 font-mono font-bold text-[10px] shrink-0">ADS</span>
+          </div>
+        </div>
+
+      </section>
+
+      <!-- =================================================================
+           TAB 2: MISI & RIG (TOKO RIG, ABSEN HARIAN, OFFERWALL, REFERRAL)
+      ================================================================== -->
+      <section id="panel-missions" class="tab-panel hidden space-y-5">
+
+        <!-- Bagian A: Absen Harian & Misi Sponsor (Offerwall) -->
+        <div class="glass-card rounded-3xl p-4 sm:p-5 space-y-3.5">
+          <div class="flex items-center justify-between">
+            <div>
+              <h2 class="text-base font-extrabold text-white flex items-center gap-2">
+                <i data-lucide="gift" class="w-4 h-4 text-emerald-400"></i>
+                <span>Misi Harian & Offerwall Sponsor</span>
+              </h2>
+              <p class="text-xs text-slate-400 mt-0.5">Klaim bonus NUSA gratis setiap hari</p>
+            </div>
+            <span id="checkinStreakBadge" class="px-2.5 py-1 rounded-full font-mono text-[11px] font-bold bg-emerald-500/15 text-emerald-300 border border-emerald-500/30">
+              Streak: 0 Hari
+            </span>
+          </div>
+
+          <!-- Absen Harian (+25 NUSA) -->
+          <div class="glass-inner rounded-2xl p-3.5 flex items-center justify-between gap-3">
+            <div class="flex items-center gap-3 min-w-0">
+              <div class="w-10 h-10 rounded-xl bg-emerald-500/15 border border-emerald-500/30 flex items-center justify-center text-emerald-400 shrink-0">
+                <i data-lucide="calendar-check" class="w-5 h-5"></i>
+              </div>
+              <div class="min-w-0">
+                <div class="font-bold text-xs sm:text-sm text-white truncate">Absen Harian (1x / Hari)</div>
+                <div class="text-[11px] text-emerald-400 font-mono mt-0.5">Hadiah: +25.00 NUSA</div>
+              </div>
+            </div>
+            <button type="button" id="dailyCheckinBtn"
+              class="btn-primary-gradient px-3.5 py-2 rounded-xl font-bold text-xs text-slate-950 shrink-0">
+              Klaim +25
+            </button>
+          </div>
+
+          <!-- Misi Sponsor / Offerwall (+40 NUSA Direct Link) -->
+          <div class="glass-inner rounded-2xl p-3.5 flex items-center justify-between gap-3">
+            <div class="flex items-center gap-3 min-w-0">
+              <div class="w-10 h-10 rounded-xl bg-indigo-500/20 border border-indigo-400/30 flex items-center justify-center text-indigo-300 shrink-0">
+                <i data-lucide="external-link" class="w-5 h-5"></i>
+              </div>
+              <div class="min-w-0">
+                <div class="font-bold text-xs sm:text-sm text-white truncate">Misi Sponsor / Offerwall</div>
+                <div class="text-[11px] text-cyan-300 font-mono mt-0.5">Hadiah: +40.00 NUSA (Direct Link)</div>
+              </div>
+            </div>
+            <button type="button" id="sponsorMissionBtn"
+              class="btn-ad-boost px-3.5 py-2 rounded-xl font-bold text-xs text-white shrink-0">
+              Buka Misi
+            </button>
+          </div>
+        </div>
+
+        <!-- Bagian B: Sistem Referral (Undang Teman & Klaim Kode) -->
+        <div class="glass-card rounded-3xl p-4 sm:p-5 space-y-3.5">
+          <div class="flex items-center justify-between">
+            <div>
+              <h3 class="text-base font-extrabold text-white flex items-center gap-2">
+                <i data-lucide="users" class="w-4 h-4 text-cyan-400"></i>
+                <span>Program Referral (+100 NUSA)</span>
+              </h3>
+              <p class="text-xs text-slate-400 mt-0.5">Bagikan kode Anda atau masukkan kode undangan teman</p>
+            </div>
+            <span id="referralCountBadge" class="font-mono text-xs font-bold text-cyan-300">0 Teman</span>
+          </div>
+
+          <!-- Kode & Tautan Undangan Sendiri -->
+          <div class="glass-inner rounded-2xl p-3.5 space-y-2">
+            <div class="flex items-center justify-between text-xs">
+              <span class="text-slate-400">Kode Undangan Anda:</span>
+              <span id="myReferralCodeText" class="font-mono font-extrabold text-emerald-300">NUSA-0000</span>
+            </div>
+            <div class="flex items-center gap-2">
+              <input id="myReferralLinkInput" type="text" readonly value="https://nusamine.app/?ref=NUSA-0000"
+                class="w-full bg-slate-950/85 border border-white/10 rounded-xl px-3 py-2 font-mono text-[11px] text-slate-300 focus:outline-none" />
+              <button type="button" id="copyReferralBtn"
+                class="px-3.5 py-2 rounded-xl bg-cyan-500/20 hover:bg-cyan-500/30 text-cyan-300 border border-cyan-500/40 font-bold text-xs shrink-0 flex items-center gap-1.5 transition">
+                <i data-lucide="copy" class="w-3.5 h-3.5"></i>
+                <span>Salin</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- Form Klaim Kode Undangan Teman -->
+          <div id="claimReferralBox" class="glass-inner rounded-2xl p-3.5 space-y-2">
+            <label for="friendReferralInput" class="block text-xs font-semibold text-slate-300">
+              Punya Kode Undangan Teman? Klaim Bonus +100 NUSA:
+            </label>
+            <div class="flex items-center gap-2">
+              <input id="friendReferralInput" type="text" placeholder="Masukkan kode (misal: NUSA-8821)"
+                class="w-full bg-slate-950/85 border border-white/10 rounded-xl px-3 py-2.5 font-mono text-xs uppercase text-white placeholder-slate-500 focus:outline-none focus:border-emerald-400" />
+              <button type="button" id="claimReferralBtn"
+                class="btn-primary-gradient px-4 py-2.5 rounded-xl font-extrabold text-xs text-slate-950 shrink-0">
+                Klaim
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Bagian C: Toko 4 Mesin Tambang Permanen -->
+        <div class="glass-card rounded-3xl p-4 sm:p-5 space-y-3">
+          <div>
+            <h3 class="text-base font-extrabold text-white flex items-center gap-2">
+              <i data-lucide="server" class="w-4 h-4 text-indigo-400"></i>
+              <span>Toko Mesin Tambang Permanen</span>
+            </h3>
+            <p class="text-xs text-slate-400 mt-0.5">Tingkatkan kecepatan GH/s permanen menggunakan koin NUSA</p>
+          </div>
+
+          <div id="rigStoreList" class="space-y-3">
+            <!-- Diisi otomatis via JavaScript -->
+          </div>
+        </div>
+
+      </section>
+
+      <!-- =================================================================
+           TAB 3: DOMPET & DANA (PENCAIRAN SALDO)
+      ================================================================== -->
+      <section id="panel-wallet" class="tab-panel hidden space-y-5">
+
+        <!-- Ringkasan Saldo & Target Minimal Penarikan -->
+        <div class="glass-card rounded-3xl p-5 space-y-4">
+          <div class="flex items-start justify-between gap-3">
+            <div>
+              <div class="text-xs text-slate-400">Saldo NUSA Siap Cair</div>
+              <div class="font-mono text-2xl sm:text-3xl font-extrabold text-white mt-0.5">
+                <span id="walletNusaDisplay">0.0000</span> <span class="text-emerald-400 text-base">NUSA</span>
+              </div>
+              <div class="flex items-center gap-2 mt-1.5 font-mono text-xs">
+                <span id="walletIdrDisplay" class="text-emerald-300 font-bold">≈ Rp 0</span>
+                <span class="text-slate-600">•</span>
+                <span id="walletUsdtDisplay" class="text-cyan-300">≈ $0.0000 USDT</span>
+              </div>
+            </div>
+            <div class="px-3 py-1.5 rounded-xl glass-inner text-right">
+              <div class="text-[10px] text-slate-400">Kurs Live</div>
+              <div id="walletLiveRateBadge" class="font-mono text-xs font-bold text-cyan-300">1 NUSA = Rp 100</div>
+            </div>
+          </div>
+
+          <!-- Progress Bar Minimal Penarikan DANA -->
+          <div class="glass-inner rounded-2xl p-3 space-y-1.5">
+            <div class="flex items-center justify-between text-[11px]">
+              <span class="text-slate-400">Syarat Minimal Tarik DANA</span>
+              <span id="minWithdrawProgressText" class="font-mono font-bold text-emerald-300">Rp 0 / Rp 10.000</span>
+            </div>
+            <div class="w-full h-2 rounded-full bg-slate-900 overflow-hidden">
+              <div id="minWithdrawProgressBar" class="h-full bg-gradient-to-r from-emerald-400 via-cyan-400 to-indigo-500 transition-all duration-300" style="width: 0%"></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Formulir Penarikan Dana -->
+        <div class="glass-card rounded-3xl p-5 space-y-4">
+          <h2 class="text-base font-extrabold text-white">Ajukan Penarikan Saldo</h2>
+
+          <!-- Pilihan Metode: Saldo DANA vs Dompet Web3 -->
+          <div class="grid grid-cols-2 gap-2 p-1 rounded-2xl bg-slate-950/85 border border-white/10">
+            <button type="button" id="methodBtn-DANA"
+              class="py-2.5 px-3 rounded-xl font-bold text-xs flex items-center justify-center gap-2 bg-gradient-to-r from-emerald-500/25 to-cyan-500/25 text-white border border-cyan-400/40 transition">
+              <i data-lucide="smartphone" class="w-4 h-4 text-cyan-300"></i>
+              <span>Saldo DANA</span>
+            </button>
+
+            <button type="button" id="methodBtn-WEB3"
+              class="py-2.5 px-3 rounded-xl font-bold text-xs flex items-center justify-center gap-2 text-slate-400 hover:text-white transition">
+              <i data-lucide="coins" class="w-4 h-4 text-indigo-400"></i>
+              <span>Dompet Web3</span>
+            </button>
+          </div>
+
+          <!-- Input Khusus Saldo DANA -->
+          <div id="withdrawFields-DANA" class="space-y-3">
+            <div>
+              <label for="danaPhoneInput" class="block text-xs font-semibold text-slate-300 mb-1">Nomor HP DANA (08...) *</label>
+              <input id="danaPhoneInput" type="tel" placeholder="Contoh: 081234567890"
+                class="w-full glass-inner rounded-xl px-3.5 py-3 font-mono text-sm text-white placeholder-slate-500 focus:outline-none focus:border-cyan-400" />
+            </div>
+            <div>
+              <label for="danaNameInput" class="block text-xs font-semibold text-slate-300 mb-1">Nama Pemilik Akun DANA *</label>
+              <input id="danaNameInput" type="text" placeholder="Nama lengkap sesuai aplikasi DANA"
+                class="w-full glass-inner rounded-xl px-3.5 py-3 text-sm text-white placeholder-slate-500 focus:outline-none focus:border-cyan-400" />
+            </div>
+          </div>
+
+          <!-- Input Khusus Dompet Web3 -->
+          <div id="withdrawFields-WEB3" class="hidden space-y-3">
+            <div>
+              <label for="web3NetworkSelect" class="block text-xs font-semibold text-slate-300 mb-1">Jaringan & Token Kripto</label>
+              <select id="web3NetworkSelect"
+                class="w-full glass-inner rounded-xl px-3.5 py-3 text-sm font-semibold text-white bg-slate-950 focus:outline-none focus:border-indigo-400">
+                <option value="Solana (USDC / SOL)">Solana Network (USDC / SOL)</option>
+                <option value="BNB Smart Chain (USDT BEP20)">BNB Smart Chain (USDT BEP20)</option>
+                <option value="Polygon PoS (USDT)">Polygon PoS (USDT)</option>
+              </select>
+            </div>
+            <div>
+              <label for="web3AddressInput" class="block text-xs font-semibold text-slate-300 mb-1">Alamat Dompet Web3 (Phantom / Trust / MetaMask) *</label>
+              <input id="web3AddressInput" type="text" placeholder="Tempel alamat wallet Solana atau 0x..."
+                class="w-full glass-inner rounded-xl px-3.5 py-3 font-mono text-xs text-white placeholder-slate-500 focus:outline-none focus:border-indigo-400" />
+            </div>
+          </div>
+
+          <!-- Input Nominal NUSA -->
+          <div class="space-y-1.5">
+            <div class="flex items-center justify-between text-xs">
+              <label for="withdrawAmountInput" class="font-semibold text-slate-300">Jumlah NUSA Ditarik</label>
+              <div class="flex items-center gap-1.5">
+                <button type="button" data-pct="0.25" class="wd-pct-btn px-2 py-0.5 rounded bg-white/10 hover:bg-white/20 font-mono text-[10px] text-slate-200">25%</button>
+                <button type="button" data-pct="0.5" class="wd-pct-btn px-2 py-0.5 rounded bg-white/10 hover:bg-white/20 font-mono text-[10px] text-slate-200">50%</button>
+                <button type="button" data-pct="1" class="wd-pct-btn px-2 py-0.5 rounded bg-emerald-500/20 hover:bg-emerald-500/30 font-mono text-[10px] font-bold text-emerald-300">MAX</button>
+              </div>
+            </div>
+            <div class="glass-inner rounded-xl px-3.5 py-2.5 flex items-center justify-between">
+              <input id="withdrawAmountInput" type="number" step="any" min="0" placeholder="0.00"
+                class="w-full bg-transparent font-mono text-xl font-bold text-white focus:outline-none" />
+              <span class="font-mono text-xs font-bold text-emerald-400 ml-2">NUSA</span>
+            </div>
+          </div>
+
+          <!-- Ringkasan Konversi Bersih -->
+          <div class="p-3.5 rounded-2xl bg-slate-950/80 border border-white/10 space-y-1.5 text-xs">
+            <div class="flex justify-between">
+              <span class="text-slate-400">Estimasi Diterima Bersih:</span>
+              <span id="withdrawReceivePreview" class="font-mono font-extrabold text-emerald-400">Rp 0</span>
+            </div>
+            <div class="flex justify-between">
+              <span class="text-slate-400">Biaya Admin:</span>
+              <span class="font-mono text-cyan-300">Rp 0 (Gratis)</span>
+            </div>
+          </div>
+
+          <button type="button" id="submitWithdrawBtn"
+            class="w-full btn-primary-gradient py-3.5 px-4 rounded-2xl font-extrabold text-xs sm:text-sm text-slate-950 shadow-lg flex items-center justify-center gap-2">
+            <i data-lucide="send" class="w-4 h-4"></i>
+            <span id="withdrawSubmitBtnText">Tarik ke Saldo DANA Sekarang</span>
+          </button>
+        </div>
+
+        <!-- Riwayat Penarikan User -->
+        <div class="glass-card rounded-3xl p-5 space-y-3">
+          <div class="flex items-center justify-between">
+            <h3 class="text-base font-extrabold text-white">Riwayat Penarikan Saya</h3>
+            <span id="userWithdrawCountBadge" class="font-mono text-xs text-slate-400">0 Riwayat</span>
+          </div>
+
+          <div id="userWithdrawalHistoryList" class="space-y-2.5">
+            <!-- Diisi otomatis via JavaScript -->
+          </div>
+        </div>
+
+      </section>
+
+      <!-- =================================================================
+           TAB 4: PANEL OWNER (ADMIN KONTROL & KEAMANAN)
+      ================================================================== -->
+      <section id="panel-owner" class="tab-panel hidden space-y-5">
+
+        <!-- Gerbang PIN Owner (Tampil jika email bukan OWNER_EMAIL & PIN belum dimasukkan) -->
+        <div id="ownerLockGate" class="glass-card rounded-3xl p-6 text-center space-y-4 border border-indigo-500/35">
+          <div class="w-14 h-14 mx-auto rounded-2xl bg-indigo-500/20 border border-indigo-400/30 flex items-center justify-center text-indigo-300">
+            <i data-lucide="lock" class="w-7 h-7"></i>
+          </div>
+          <div>
+            <h2 class="text-lg font-extrabold text-white">Akses Terbatas — Panel Owner</h2>
+            <p class="text-xs text-slate-400 mt-1 max-w-sm mx-auto leading-relaxed">
+              Masukkan PIN Owner untuk mengelola kurs NUSA, tautan iklan Adsterra, dan menyetujui penarikan DANA pengguna. (PIN Uji Coba: <code class="font-mono text-cyan-300">123456</code>)
+            </p>
+          </div>
+          <div class="max-w-xs mx-auto space-y-3">
+            <input id="ownerPinInput" type="password" inputmode="numeric" maxlength="12" placeholder="Masukkan PIN Owner"
+              class="w-full glass-inner rounded-xl px-4 py-3 text-center font-mono text-base tracking-widest text-white placeholder-slate-500 focus:outline-none focus:border-indigo-400" />
+            <button type="button" id="unlockOwnerBtn"
+              class="w-full btn-primary-gradient py-3 px-4 rounded-xl font-extrabold text-xs sm:text-sm text-slate-950">
+              Buka Panel Owner
+            </button>
+          </div>
+        </div>
+
+        <!-- Konten Panel Owner Terbuka -->
+        <div id="ownerDashboardContent" class="hidden space-y-5">
+
+          <!-- Header Admin -->
+          <div class="glass-card rounded-3xl p-5 border border-indigo-500/35 bg-gradient-to-br from-indigo-500/10 via-slate-900/80 to-emerald-500/10 flex items-center justify-between gap-3">
+            <div>
+              <span class="px-2 py-0.5 rounded text-[10px] font-mono font-bold uppercase bg-indigo-500/20 text-indigo-300 border border-indigo-500/40">
+                Owner Admin Console
+              </span>
+              <h2 class="text-lg font-extrabold text-white mt-1.5">Kontrol Ekonomi & Monetisasi</h2>
+              <p class="text-xs text-slate-300 mt-0.5">Perubahan langsung tersimpan ke Cloud & berlaku untuk semua pengguna.</p>
+            </div>
+            <i data-lucide="shield-check" class="w-8 h-8 text-emerald-400 shrink-0"></i>
+          </div>
+
+          <!-- (c) Kalkulator Profitabilitas Owner -->
+          <div class="glass-card rounded-3xl p-5 space-y-4">
+            <h3 class="text-xs font-extrabold uppercase tracking-wider text-slate-300 flex items-center gap-2">
+              <i data-lucide="bar-chart-3" class="w-4 h-4 text-emerald-400"></i>
+              <span>Kalkulator Profitabilitas Owner</span>
+            </h3>
+
+            <div class="grid grid-cols-2 gap-3">
+              <div class="glass-inner rounded-2xl p-3.5">
+                <div class="text-[11px] text-slate-400">Estimasi Tayangan Iklan</div>
+                <div id="ownerTotalImpressions" class="font-mono text-xl font-extrabold text-cyan-300 mt-1">0</div>
+                <div class="text-[10px] text-slate-500 mt-0.5">Boost + Offerwall + Banner</div>
+              </div>
+
+              <div class="glass-inner rounded-2xl p-3.5 border border-emerald-500/30">
+                <div class="text-[11px] text-emerald-300">Pendapatan Iklan (Gross)</div>
+                <div id="ownerGrossAdRevenue" class="font-mono text-base sm:text-lg font-extrabold text-emerald-400 mt-1">Rp 0</div>
+                <div id="ownerEcpmSubtitle" class="text-[10px] text-slate-400 mt-0.5">eCPM: Rp 35.000 / 1K</div>
+              </div>
+
+              <div class="glass-inner rounded-2xl p-3.5">
+                <div class="text-[11px] text-slate-400">Total Kewajiban Bayar DANA</div>
+                <div id="ownerTotalLiability" class="font-mono text-base sm:text-lg font-bold text-indigo-300 mt-1">Rp 0</div>
+                <div class="text-[10px] text-slate-500 mt-0.5">Pending + Approved</div>
+              </div>
+
+              <div class="glass-inner rounded-2xl p-3.5 border border-cyan-500/30 bg-cyan-950/20">
+                <div class="text-[11px] text-cyan-200">Estimasi Profit Bersih</div>
+                <div id="ownerNetProfit" class="font-mono text-base sm:text-lg font-extrabold text-white mt-1">Rp 0</div>
+                <div id="ownerProfitHealth" class="text-[10px] text-emerald-400 mt-0.5">Margin Sehat</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- (a) Pengaturan Ekonomi & Iklan Live ke Firestore -->
+          <div class="glass-card rounded-3xl p-5 space-y-4">
+            <h3 class="text-xs font-extrabold uppercase tracking-wider text-slate-300 flex items-center gap-2">
+              <i data-lucide="sliders" class="w-4 h-4 text-cyan-400"></i>
+              <span>Pengaturan Ekonomi & Tautan Iklan Live</span>
+            </h3>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
+              <div>
+                <label for="cfgNusaToIdr" class="block text-slate-400 mb-1">Kurs 1 NUSA ke Rupiah (Rp)</label>
+                <input id="cfgNusaToIdr" type="number" min="1" step="any"
+                  class="w-full glass-inner rounded-xl px-3 py-2.5 font-mono font-bold text-white focus:outline-none focus:border-emerald-400" />
+              </div>
+
+              <div>
+                <label for="cfgMinWithdrawIdr" class="block text-slate-400 mb-1">Minimal Tarik DANA (Rp)</label>
+                <input id="cfgMinWithdrawIdr" type="number" min="500" step="500"
+                  class="w-full glass-inner rounded-xl px-3 py-2.5 font-mono font-bold text-white focus:outline-none focus:border-emerald-400" />
+              </div>
+
+              <div>
+                <label for="cfgAdRewardNusa" class="block text-slate-400 mb-1">Bonus NUSA per Iklan</label>
+                <input id="cfgAdRewardNusa" type="number" min="0" step="any"
+                  class="w-full glass-inner rounded-xl px-3 py-2.5 font-mono font-bold text-white focus:outline-none focus:border-cyan-400" />
+              </div>
+
+              <div>
+                <label for="cfgEcpmIdr" class="block text-slate-400 mb-1">Simulasi eCPM Iklan (Rp / 1K)</label>
+                <input id="cfgEcpmIdr" type="number" min="1000" step="1000"
+                  class="w-full glass-inner rounded-xl px-3 py-2.5 font-mono font-bold text-white focus:outline-none focus:border-cyan-400" />
+              </div>
+
+              <div class="sm:col-span-2">
+                <label for="cfgDirectLinkUrl" class="block text-slate-400 mb-1">URL Direct Link Adsterra / Monetag (Edit Live dari HP)</label>
+                <input id="cfgDirectLinkUrl" type="url" placeholder="https://www.highcpmgate.com/..."
+                  class="w-full glass-inner rounded-xl px-3 py-2.5 font-mono text-xs text-cyan-300 placeholder-slate-500 focus:outline-none focus:border-indigo-400" />
+              </div>
+            </div>
+
+            <button type="button" id="saveOwnerSettingsBtn"
+              class="w-full btn-primary-gradient py-3 px-4 rounded-2xl font-extrabold text-xs text-slate-950 flex items-center justify-center gap-2">
+              <i data-lucide="save" class="w-4 h-4"></i>
+              <span>Simpan Pengaturan ke Cloud</span>
+            </button>
+          </div>
+
+          <!-- (b) Antrean Penarikan User -->
+          <div class="glass-card rounded-3xl p-5 space-y-3">
+            <div class="flex items-center justify-between">
+              <h3 class="text-xs font-extrabold uppercase tracking-wider text-slate-300 flex items-center gap-2">
+                <i data-lucide="list-checks" class="w-4 h-4 text-emerald-400"></i>
+                <span>Antrean Penarikan User</span>
+              </h3>
+              <span id="ownerPendingWithdrawBadge" class="px-2 py-0.5 rounded-full font-mono text-[10px] font-bold bg-indigo-500/20 text-indigo-300">
+                0 Pending
+              </span>
+            </div>
+
+            <div id="ownerWithdrawalQueueList" class="space-y-3">
+              <!-- Diisi otomatis via JavaScript -->
+            </div>
+          </div>
+
+          <!-- (d) Firestore Security Rules Anti-Cheat -->
+          <div class="glass-card rounded-3xl p-5 space-y-3">
+            <div class="flex items-center justify-between gap-2">
+              <div>
+                <h3 class="text-xs font-extrabold uppercase tracking-wider text-emerald-300 flex items-center gap-2">
+                  <i data-lucide="shield-alert" class="w-4 h-4"></i>
+                  <span>Firestore Security Rules (Anti-Peretasan)</span>
+                </h3>
+                <p class="text-[11px] text-slate-400 mt-0.5">Tempel aturan ini ke Firebase Console → Firestore → Rules</p>
+              </div>
+              <button type="button" id="copySecurityRulesBtn"
+                class="px-3 py-2 rounded-xl bg-emerald-500/20 hover:bg-emerald-500/30 text-emerald-300 border border-emerald-500/40 font-bold text-xs shrink-0 flex items-center gap-1.5 transition">
+                <i data-lucide="copy" class="w-3.5 h-3.5"></i>
+                <span>Salin Rules</span>
+              </button>
+            </div>
+
+            <pre id="firestoreRulesCode" class="glass-inner rounded-2xl p-3.5 font-mono text-[10px] sm:text-[11px] text-cyan-200 overflow-x-auto leading-relaxed">rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Aturan Keamanan NusaMine Production
+    match /artifacts/{appId}/users/{userId}/{document=**} {
+      // Pengguna hanya boleh membaca & mengubah datanya sendiri
+      allow read, write: if request.auth != null && request.auth.uid == userId;
+    }
+
+    match /artifacts/{appId}/public/data/appSettings/{docId} {
+      // Semua user terautentikasi bisa membaca kurs & pengaturan
+      allow read: if request.auth != null;
+      // Hanya email Owner yang boleh mengubah pengaturan global
+      allow write: if request.auth != null
+                   && request.auth.token.email == "owner@nusamine.app";
+    }
+
+    match /artifacts/{appId}/public/data/withdrawals/{wdId} {
+      // User terautentikasi bisa mengajukan penarikan & melihat riwayat
+      allow read, create: if request.auth != null;
+      // Hanya Owner yang boleh menyetujui atau menolak penarikan
+      allow update, delete: if request.auth != null
+                            && request.auth.token.email == "owner@nusamine.app";
+    }
+  }
+}</pre>
+          </div>
+
+        </div>
+      </section>
+
+    </main>
+
+    <!-- NAVIGASI BAWAH 4 TAB MOBILE-FIRST -->
+    <nav aria-label="Navigasi Utama NusaMine" class="fixed bottom-0 inset-x-0 z-40 glass-card border-x-0 border-b-0 pb-safe">
+      <div class="max-w-xl mx-auto px-2 pt-2 grid grid-cols-4 gap-1">
+        <button type="button" id="navBtn-mining" data-tab="mining"
+          class="nav-tab-btn flex flex-col items-center justify-center py-1.5 px-1 rounded-xl text-emerald-400 bg-emerald-500/15 border border-emerald-500/30 transition">
+          <i data-lucide="cpu" class="w-5 h-5"></i>
+          <span class="text-[10px] font-bold mt-1">Tambang</span>
+        </button>
+
+        <button type="button" id="navBtn-missions" data-tab="missions"
+          class="nav-tab-btn flex flex-col items-center justify-center py-1.5 px-1 rounded-xl text-slate-400 hover:text-white border border-transparent transition">
+          <i data-lucide="rocket" class="w-5 h-5"></i>
+          <span class="text-[10px] font-semibold mt-1">Misi & Rig</span>
+        </button>
+
+        <button type="button" id="navBtn-wallet" data-tab="wallet"
+          class="nav-tab-btn flex flex-col items-center justify-center py-1.5 px-1 rounded-xl text-slate-400 hover:text-white border border-transparent transition">
+          <i data-lucide="wallet" class="w-5 h-5"></i>
+          <span class="text-[10px] font-semibold mt-1">Dompet & DANA</span>
+        </button>
+
+        <button type="button" id="navBtn-owner" data-tab="owner"
+          class="nav-tab-btn flex flex-col items-center justify-center py-1.5 px-1 rounded-xl text-slate-400 hover:text-white border border-transparent transition relative">
+          <i data-lucide="shield" class="w-5 h-5"></i>
+          <span class="text-[10px] font-semibold mt-1">Panel Owner</span>
+          <span id="navOwnerPendingDot" class="hidden absolute top-1.5 right-4 w-2 h-2 rounded-full bg-indigo-400 animate-pulse"></span>
+        </button>
+      </div>
+    </nav>
+
+  </div>
+
+  <!-- =====================================================================
+       MODAL HITUNG MUNDUR IKLAN REWARDED (15 DETIK)
+  ====================================================================== -->
+  <div id="rewardedAdModal" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/90 backdrop-blur-md">
+    <div class="glass-card rounded-3xl max-w-sm w-full p-5 border border-indigo-500/40 shadow-2xl space-y-4">
+      <div class="flex items-center justify-between">
+        <span class="px-2.5 py-0.5 rounded-full text-[10px] font-mono font-bold uppercase bg-indigo-500/20 text-indigo-300 border border-indigo-500/40">
+          Rewarded Sponsor Ad
+        </span>
+        <span id="adCountdownText" class="font-mono text-xs font-bold text-cyan-300">15 detik tersisa</span>
+      </div>
+
+      <div class="rounded-2xl bg-gradient-to-br from-indigo-950 via-slate-900 to-emerald-950 border border-white/15 p-5 text-center space-y-3">
+        <div class="w-14 h-14 mx-auto rounded-2xl bg-cyan-500/20 border border-cyan-400/40 flex items-center justify-center text-cyan-300">
+          <i data-lucide="sparkles" class="w-7 h-7"></i>
+        </div>
+        <div>
+          <div class="text-[11px] font-mono text-emerald-300 uppercase">Sponsor Ekosistem Web3</div>
+          <h4 class="font-extrabold text-base text-white mt-1">Verifikasi Tayangan Iklan</h4>
+          <p class="text-xs text-slate-300 mt-1 leading-relaxed">
+            Tetap di layar ini selama 15 detik untuk mengklaim <strong id="modalAdRewardLabel" class="text-emerald-300">+50 GH/s & +15 NUSA</strong> ke akun Anda.
+          </p>
+        </div>
+        <div class="w-full h-2 rounded-full bg-slate-950 overflow-hidden">
+          <div id="adProgressBar" class="h-full bg-gradient-to-r from-emerald-400 via-cyan-400 to-indigo-500 transition-all duration-1000" style="width: 0%"></div>
+        </div>
+      </div>
+
+      <button type="button" id="claimAdRewardBtn" disabled
+        class="w-full py-3.5 px-4 rounded-2xl font-extrabold text-xs sm:text-sm bg-slate-800 text-slate-500 cursor-not-allowed transition flex items-center justify-center gap-2">
+        <i data-lucide="clock" class="w-4 h-4"></i>
+        <span id="claimAdRewardBtnText">Menunggu Selesai (15d)</span>
+      </button>
+    </div>
+  </div>
+
+  <!-- =====================================================================
+       KONTAINER TOAST NOTIFIKASI
+  ====================================================================== -->
+  <div id="toastContainer" class="fixed top-4 right-3 left-3 max-w-md mx-auto z-50 flex flex-col gap-2 pointer-events-none"></div>
+
+  <!-- =====================================================================
+       SCRIPT UTAMA FIREBASE MODULAR SDK + LOGIKA NUSAMINE
+  ====================================================================== -->
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+    import {
+      getAuth,
+      GoogleAuthProvider,
+      signInWithPopup,
+      signInWithEmailAndPassword,
+      createUserWithEmailAndPassword,
+      signInAnonymously,
+      signInWithCustomToken,
+      updateProfile,
+      signOut,
+      onAuthStateChanged
+    } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+    import {
+      getFirestore,
+      doc,
+      getDoc,
+      setDoc,
+      updateDoc,
+      addDoc,
+      collection,
+      onSnapshot,
+      increment
+    } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+
+    // =========================================================================
+    // [1. KONFIGURASI FIREBASE — EDIT BAGIAN INI LANGSUNG DARI HP DI GITHUB]
+    // Salin konfigurasi proyek dari Firebase Console -> Project Settings -> Web App.
+    // Jika dibiarkan berisi "ISI_...", aplikasi otomatis masuk Mode Preview Lokal.
+    // =========================================================================
+    const FIREBASE_CONFIG = {
+      apiKey: "ISI_API_KEY_FIREBASE_ANDA",
+      authDomain: "ISI_PROJECT_ID.firebaseapp.com",
+      projectId: "ISI_PROJECT_ID",
+      storageBucket: "ISI_PROJECT_ID.appspot.com",
+      messagingSenderId: "ISI_SENDER_ID",
+      appId: "ISI_APP_ID"
+    };
+
+    // =========================================================================
+    // [2. KONFIGURASI MONETISASI IKLAN & AKSES OWNER]
+    // Ganti URL Direct Link Adsterra/Monetag dan Email/PIN Owner di bawah ini:
+    // =========================================================================
+    const AD_CONFIG = {
+      directLinkUrl: "ISI_DIRECT_LINK_ADSTERRA_ANDA", // Contoh: "https://www.highcpmgate.com/xyz123"
+      offerwallUrl: "ISI_OFFERWALL_LINK_ANDA",        // Contoh: "https://www.highcpmgate.com/offer456"
+      adCooldownSec: 30,                              // Jeda anti-spam tombol iklan (detik)
+      adWatchSec: 15                                  // Durasi verifikasi iklan (detik)
+    };
+
+    const OWNER_EMAIL = "owner@nusamine.app"; // Ganti dengan email Google/Admin Anda
+    const OWNER_PIN = "123456";               // PIN cadangan untuk membuka Panel Owner
+
+    // =========================================================================
+    // [3. KATALOG 4 MESIN TAMBANG PERMANEN]
+    // =========================================================================
+    const RIG_CATALOG = [
+      {
+        id: "usb_node",
+        name: "Starter USB Node",
+        desc: "Perangkat cloud mining ringan untuk akselerasi awal.",
+        addGh: 10,
+        basePrice: 50,
+        icon: "cpu",
+        badgeClass: "text-emerald-300 bg-emerald-500/15 border-emerald-500/30"
+      },
+      {
+        id: "rtx_4090",
+        name: "GPU Rig RTX 4090",
+        desc: "Komputasi paralel kartu grafis berkecepatan tinggi.",
+        addGh: 35,
+        basePrice: 160,
+        icon: "hard-drive",
+        badgeClass: "text-cyan-300 bg-cyan-500/15 border-cyan-500/30"
+      },
+      {
+        id: "asic_s21",
+        name: "ASIC Antminer S21",
+        desc: "Mesin tambang sirkuit terpadu khusus dengan efisiensi tinggi.",
+        addGh: 100,
+        basePrice: 420,
+        icon: "server",
+        badgeClass: "text-indigo-300 bg-indigo-500/15 border-indigo-500/30"
+      },
+      {
+        id: "quantum_cluster",
+        name: "Quantum Cloud Cluster",
+        desc: "Infrastruktur pusat data kuantum untuk yield NUSA maksimal.",
+        addGh: 300,
+        basePrice: 1150,
+        icon: "database",
+        badgeClass: "text-emerald-300 bg-gradient-to-r from-emerald-500/20 to-indigo-500/20 border-cyan-400/40"
+      }
+    ];
+
+    // =========================================================================
+    // [4. INISIALISASI STATE APLIKASI & DETEKSI FIREBASE]
+    // =========================================================================
+    const injectedConfig = typeof __firebase_config !== "undefined" ? JSON.parse(__firebase_config) : null;
+    const isCustomConfigFilled =
+      FIREBASE_CONFIG.apiKey &&
+      !FIREBASE_CONFIG.apiKey.startsWith("ISI_") &&
+      FIREBASE_CONFIG.projectId &&
+      !FIREBASE_CONFIG.projectId.startsWith("ISI_");
+
+    const activeFirebaseConfig = injectedConfig || (isCustomConfigFilled ? FIREBASE_CONFIG : null);
+    const appNamespaceId = typeof __app_id !== "undefined" ? __app_id : "nusamine-prod";
+
+    let firebaseApp = null;
+    let auth = null;
+    let db = null;
+    let unsubUserDoc = null;
+    let unsubSettingsDoc = null;
+    let unsubWithdrawals = null;
+
+    // State Global In-Memory (Dipakai oleh Cloud Sync maupun Mode Preview Lokal)
+    const state = {
+      isPreviewMode: false,
+      currentUser: null, // { uid, email, displayName, photoURL }
+      ownerUnlocked: false,
+      activeTab: "mining",
+      withdrawMethod: "DANA",
+      adTimerInterval: null,
+
+      // Pengaturan Global (dari Firestore config/appSettings)
+      appSettings: {
+        nusaToIdr: 100,          // 1 NUSA = Rp 100
+        usdtToIdr: 16250,        // 1 USDT = Rp 16.250
+        minWithdrawIdr: 10000,   // Minimal tarik DANA Rp 10.000
+        adRewardNusa: 15,        // +15 NUSA per iklan
+        adBoostGh: 50,           // +50 GH/s per iklan
+        ecpmIdr: 35000,          // Rp 35.000 per 1.000 tayangan
+        directLinkUrl: AD_CONFIG.directLinkUrl,
+        totalAdImpressions: 24   // Statistik tayangan iklan global
+      },
+
+      // Dokumen Profil Pengguna (/users/{uid})
+      userData: {
+        email: "preview@nusamine.app",
+        displayName: "Penambang Preview",
+        photoURL: "",
+        balance: 45.0,
+        hashrateGH: 25,
+        miningActive: true,
+        miningStartTime: Date.now() - 15 * 60 * 1000, // Simulasi sudah jalan 15 menit
+        miningDurationSec: 14400, // 4 jam
+        lastCheckinDate: "",
+        checkinStreak: 1,
+        adBoostsToday: 0,
+        adBoostDate: "",
+        lastAdTime: 0,
+        referralCode: "NUSA-" + Math.floor(1000 + Math.random() * 9000),
+        referredBy: "",
+        referralCount: 0,
+        ownedRigs: {
+          usb_node: 0,
+          rtx_4090: 0,
+          asic_s21: 0,
+          quantum_cluster: 0
+        }
+      },
+
+      // Daftar Penarikan (dari Firestore withdrawals)
+      withdrawals: []
+    };
+
+    // =========================================================================
+    // [5. UTILITAS HELPER & NOTIFIKASI TOAST]
+    // =========================================================================
+    function getTodayStr() {
+      return new Date().toISOString().slice(0, 10);
+    }
+
+    function formatIdr(val) {
+      return "Rp " + Math.round(val || 0).toLocaleString("id-ID");
+    }
+
+    function formatHMS(ms) {
+      if (ms <= 0) return "00:00:00";
+      const totalSec = Math.floor(ms / 1000);
+      const h = String(Math.floor(totalSec / 3600)).padStart(2, "0");
+      const m = String(Math.floor((totalSec % 3600) / 60)).padStart(2, "0");
+      const s = String(totalSec % 60).padStart(2, "0");
+      return `${h}:${m}:${s}`;
+    }
+
+    function copyTextSafe(text, label = "Teks") {
+      const ta = document.createElement("textarea");
+      ta.value = text;
+      ta.style.position = "fixed";
+      ta.style.opacity = "0";
+      document.body.appendChild(ta);
+      ta.select();
+      try {
+        document.execCommand("copy");
+        showToast("success", `${label} Disalin!`, "Berhasil disalin ke papan klip.");
+      } catch (e) {
+        showToast("error", "Gagal Menyalin", "Browser membatasi akses papan klip.");
+      }
+      document.body.removeChild(ta);
+    }
+
+    function showToast(type, title, message) {
+      const container = document.getElementById("toastContainer");
+      const toast = document.createElement("div");
+      toast.className =
+        "pointer-events-auto glass-card rounded-2xl p-3.5 border shadow-2xl flex items-start gap-3 transition-all duration-300 transform -translate-y-2 opacity-0";
+
+      let icon = "check-circle-2";
+      let iconColor = "text-emerald-400";
+      let borderColor = "border-emerald-500/40";
+
+      if (type === "error") {
+        icon = "alert-circle";
+        iconColor = "text-rose-400";
+        borderColor = "border-rose-500/40";
+      } else if (type === "info") {
+        icon = "sparkles";
+        iconColor = "text-cyan-400";
+        borderColor = "border-cyan-500/40";
+      }
+
+      toast.classList.add(borderColor);
+      toast.innerHTML = `
+        <div class="${iconColor} mt-0.5 shrink-0"><i data-lucide="${icon}" class="w-4 h-4"></i></div>
+        <div class="flex-1 min-w-0">
+          <div class="font-bold text-xs text-white">${title}</div>
+          <div class="text-[11px] text-slate-300 mt-0.5 leading-snug">${message}</div>
+        </div>
+      `;
+      container.appendChild(toast);
+      lucide.createIcons();
+
+      requestAnimationFrame(() => toast.classList.remove("-translate-y-2", "opacity-0"));
+      setTimeout(() => {
+        toast.classList.add("opacity-0", "-translate-y-2");
+        setTimeout(() => toast.remove(), 280);
+      }, 3600);
+    }
+
+    // =========================================================================
+    // [6. HELPER PATH FIRESTORE (STRICT RULE 1 PATHS)]
+    // =========================================================================
+    function getUserDocRef(uid) {
+      return doc(db, "artifacts", appNamespaceId, "users", uid, "profile", "main");
+    }
+
+    function getSettingsDocRef() {
+      return doc(db, "artifacts", appNamespaceId, "public", "data", "appSettings", "global");
+    }
+
+    function getWithdrawalsColRef() {
+      return collection(db, "artifacts", appNamespaceId, "public", "data", "withdrawals");
+    }
+
+    function getWithdrawalDocRef(wdId) {
+      return doc(db, "artifacts", appNamespaceId, "public", "data", "withdrawals", wdId);
+    }
+
+    // =========================================================================
+    // [7. PERHITUNGAN ANTI-CHEAT CLOUD MINING]
+    // Menghitung hasil berdasarkan selisih waktu (now - miningStartTime)
+    // dibatasi maksimal miningDurationSec (14.400 detik / 4 jam).
+    // =========================================================================
+    function getEffectiveHashrate() {
+      const today = getTodayStr();
+      const boostsToday = state.userData.adBoostDate === today ? (state.userData.adBoostsToday || 0) : 0;
+      const cappedBoosts = Math.min(10, boostsToday);
+      return (Number(state.userData.hashrateGH) || 25) + cappedBoosts * (Number(state.appSettings.adBoostGh) || 50);
+    }
+
+    function getHourlyYieldNusa() {
+      // Rumus: 1 GH/s menghasilkan 0.4 NUSA per jam
+      return getEffectiveHashrate() * 0.4;
+    }
+
+    function computeMiningProgress(nowMs = Date.now()) {
+      const u = state.userData;
+      const durationSec = Number(u.miningDurationSec) || 14400;
+      if (!u.miningActive || !u.miningStartTime) {
+        return {
+          isRunning: false,
+          isCompleted: false,
+          elapsedSec: 0,
+          remainingMs: durationSec * 1000,
+          accruedNusa: 0
+        };
+      }
+
+      const rawElapsedSec = Math.max(0, (nowMs - Number(u.miningStartTime)) / 1000);
+      const clampedElapsedSec = Math.min(durationSec, rawElapsedSec);
+      const remainingMs = Math.max(0, durationSec * 1000 - (nowMs - Number(u.miningStartTime)));
+      const ratePerSec = getHourlyYieldNusa() / 3600;
+      const accruedNusa = clampedElapsedSec * ratePerSec;
+
+      return {
+        isRunning: remainingMs > 0,
+        isCompleted: remainingMs <= 0,
+        elapsedSec: clampedElapsedSec,
+        remainingMs,
+        accruedNusa
+      };
+    }
+
+    // =========================================================================
+    // [8. SINKRONISASI DATA CLOUD / MODE PREVIEW LOKAL]
+    // =========================================================================
+    async function ensureUserDocument(firebaseUser) {
+      const userRef = getUserDocRef(firebaseUser.uid);
+      const snap = await getDoc(userRef);
+
+      if (!snap.exists()) {
+        const cleanName =
+          firebaseUser.displayName ||
+          (firebaseUser.email ? firebaseUser.email.split("@")[0] : "Penambang Nusa");
+
+        const initialDoc = {
+          email: firebaseUser.email || "",
+          displayName: cleanName,
+          photoURL: firebaseUser.photoURL || "",
+          balance: 25.0,
+          hashrateGH: 25,
+          miningActive: false,
+          miningStartTime: 0,
+          miningDurationSec: 14400,
+          lastCheckinDate: "",
+          checkinStreak: 0,
+          adBoostsToday: 0,
+          adBoostDate: getTodayStr(),
+          lastAdTime: 0,
+          referralCode: "NUSA-" + firebaseUser.uid.slice(0, 4).toUpperCase() + Math.floor(10 + Math.random() * 89),
+          referredBy: "",
+          referralCount: 0,
+          ownedRigs: {
+            usb_node: 0,
+            rtx_4090: 0,
+            asic_s21: 0,
+            quantum_cluster: 0
+          }
+        };
+        await setDoc(userRef, initialDoc);
+        state.userData = { ...state.userData, ...initialDoc };
+      } else {
+        state.userData = {
+          ...state.userData,
+          ...snap.data(),
+          ownedRigs: { ...state.userData.ownedRigs, ...(snap.data().ownedRigs || {}) }
+        };
+      }
+    }
+
+    async function ensureGlobalSettingsDocument() {
+      const settingsRef = getSettingsDocRef();
+      const snap = await getDoc(settingsRef);
+      if (!snap.exists()) {
+        await setDoc(settingsRef, state.appSettings);
+      } else {
+        state.appSettings = { ...state.appSettings, ...snap.data() };
+      }
+    }
+
+    function attachFirestoreListeners(uid) {
+      detachFirestoreListeners();
+
+      // 1. Listener Profil Pengguna Real-Time
+      unsubUserDoc = onSnapshot(
+        getUserDocRef(uid),
+        (docSnap) => {
+          if (docSnap.exists()) {
+            const data = docSnap.data();
+            state.userData = {
+              ...state.userData,
+              ...data,
+              ownedRigs: { ...state.userData.ownedRigs, ...(data.ownedRigs || {}) }
+            };
+            renderAllSections();
+          }
+        },
+        (error) => {
+          console.error("Firestore user listener error:", error);
+        }
+      );
+
+      // 2. Listener Pengaturan Global (Kurs, Minimal DANA, Direct Link)
+      unsubSettingsDoc = onSnapshot(
+        getSettingsDocRef(),
+        (docSnap) => {
+          if (docSnap.exists()) {
+            state.appSettings = { ...state.appSettings, ...docSnap.data() };
+            renderAllSections();
+          }
+        },
+        (error) => {
+          console.error("Firestore settings listener error:", error);
+        }
+      );
+
+      // 3. Listener Koleksi Withdrawals (Tanpa orderBy/limit kompleks sesuai aturan)
+      unsubWithdrawals = onSnapshot(
+        getWithdrawalsColRef(),
+        (querySnap) => {
+          const list = [];
+          querySnap.forEach((docItem) => {
+            list.push({ id: docItem.id, ...docItem.data() });
+          });
+          // Urutkan terbaru di memori JavaScript
+          list.sort((a, b) => (b.createdAtMs || 0) - (a.createdAtMs || 0));
+          state.withdrawals = list;
+          renderWalletSection();
+          renderOwnerSection();
+        },
+        (error) => {
+          console.error("Firestore withdrawals listener error:", error);
+        }
+      );
+    }
+
+    function detachFirestoreListeners() {
+      if (unsubUserDoc) { unsubUserDoc(); unsubUserDoc = null; }
+      if (unsubSettingsDoc) { unsubSettingsDoc(); unsubSettingsDoc = null; }
+      if (unsubWithdrawals) { unsubWithdrawals(); unsubWithdrawals = null; }
+    }
+
+    // Helper Update Profil User (Otomatis pilih Firestore atau In-Memory Preview)
+    async function patchUserData(updates) {
+      if (state.isPreviewMode || !db || !state.currentUser) {
+        state.userData = { ...state.userData, ...updates };
+        renderAllSections();
+        return;
+      }
+      await updateDoc(getUserDocRef(state.currentUser.uid), updates);
+    }
+
+    async function patchGlobalSettings(updates) {
+      if (state.isPreviewMode || !db || !state.currentUser) {
+        state.appSettings = { ...state.appSettings, ...updates };
+        renderAllSections();
+        return;
+      }
+      await setDoc(getSettingsDocRef(), updates, { merge: true });
+    }
+
+    // =========================================================================
+    // [9. AUTENTIKASI: GOOGLE, EMAIL/PASSWORD, DAN MODE PREVIEW LOKAL]
+    // =========================================================================
+    let isRegisterMode = false;
+
+    function switchAuthFormTab(registerMode) {
+      isRegisterMode = registerMode;
+      const loginTab = document.getElementById("authTabLogin");
+      const regTab = document.getElementById("authTabRegister");
+      const nameGroup = document.getElementById("registerNameGroup");
+      const submitBtn = document.getElementById("emailAuthSubmitBtn");
+
+      if (registerMode) {
+        regTab.className = "py-2 rounded-lg bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 transition";
+        loginTab.className = "py-2 rounded-lg text-slate-400 hover:text-white transition";
+        nameGroup.classList.remove("hidden");
+        submitBtn.textContent = "Daftar Akun Baru";
+      } else {
+        loginTab.className = "py-2 rounded-lg bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 transition";
+        regTab.className = "py-2 rounded-lg text-slate-400 hover:text-white transition";
+        nameGroup.classList.add("hidden");
+        submitBtn.textContent = "Masuk dengan Email";
+      }
+    }
+
+    function enterAppUI() {
+      document.getElementById("authScreen").classList.add("hidden");
+      document.getElementById("mainAppWrapper").classList.remove("hidden");
+
+      // Cek apakah email termasuk OWNER_EMAIL
+      if (state.currentUser && state.currentUser.email === OWNER_EMAIL) {
+        state.ownerUnlocked = true;
+      }
+
+      // Isi parameter referral dari URL (?ref=...) jika ada
+      const urlParams = new URLSearchParams(window.location.search);
+      const refParam = urlParams.get("ref");
+      if (refParam && !state.userData.referredBy) {
+        document.getElementById("friendReferralInput").value = refParam.toUpperCase();
+      }
+
+      renderAllSections();
+    }
+
+    function activatePreviewMode() {
+      state.isPreviewMode = true;
+      state.currentUser = {
+        uid: "preview-user-001",
+        email: "demo@nusamine.app",
+        displayName: "Penambang Preview",
+        photoURL: ""
+      };
+      document.getElementById("previewModeTopBanner").classList.remove("hidden");
+      enterAppUI();
+      showToast("info", "Mode Preview Lokal Aktif", "Semua fitur tambang, iklan, DANA, dan Panel Owner siap diuji coba.");
+    }
+
+    async function handleGoogleLogin() {
+      if (!auth) {
+        showToast("info", "Firebase Belum Dikonfigurasi", "Mengaktifkan Mode Preview Lokal otomatis...");
+        activatePreviewMode();
+        return;
+      }
+      try {
+        const provider = new GoogleAuthProvider();
+        await signInWithPopup(auth, provider);
+      } catch (err) {
+        showToast("error", "Login Google Gagal", err.message || "Pastikan domain sudah terdaftar di Firebase Auth.");
+      }
+    }
+
+    async function handleEmailAuthSubmit(e) {
+      e.preventDefault();
+      if (!auth) {
+        showToast("info", "Firebase Belum Dikonfigurasi", "Mengaktifkan Mode Preview Lokal otomatis...");
+        activatePreviewMode();
+        return;
+      }
+
+      const email = document.getElementById("authEmailInput").value.trim();
+      const password = document.getElementById("authPasswordInput").value;
+      const displayName = document.getElementById("authNameInput").value.trim();
+
+      try {
+        if (isRegisterMode) {
+          const cred = await createUserWithEmailAndPassword(auth, email, password);
+          if (displayName) {
+            await updateProfile(cred.user, { displayName });
+          }
+          showToast("success", "Pendaftaran Berhasil!", "Akun NusaMine Anda telah aktif.");
+        } else {
+          await signInWithEmailAndPassword(auth, email, password);
+          showToast("success", "Berhasil Masuk!", "Selamat datang kembali di NusaMine.");
+        }
+      } catch (err) {
+        showToast("error", "Autentikasi Gagal", err.message || "Periksa kembali email dan kata sandi Anda.");
+      }
+    }
+
+    async function handleLogout() {
+      detachFirestoreListeners();
+      state.ownerUnlocked = false;
+      if (!state.isPreviewMode && auth) {
+        try {
+          await signOut(auth);
+        } catch (e) {
+          console.error(e);
+        }
+      }
+      state.isPreviewMode = false;
+      state.currentUser = null;
+      document.getElementById("mainAppWrapper").classList.add("hidden");
+      document.getElementById("authScreen").classList.remove("hidden");
+      showToast("info", "Berhasil Keluar", "Sesi akun Anda telah ditutup.");
+    }
+
+    // =========================================================================
+    // [10. AKSI TAMBANG & KLAIM HASIL ANTI-CHEAT]
+    // =========================================================================
+    async function handleMainMiningAction() {
+      const now = Date.now();
+      const prog = computeMiningProgress(now);
+
+      if (!prog.isRunning && !prog.isCompleted) {
+        // Mulai sesi tambang 4 jam baru
+        await patchUserData({
+          miningActive: true,
+          miningStartTime: now,
+          miningDurationSec: 14400
+        });
+        showToast("success", "Reaktor Tambang Menyala!", "Sesi cloud mining 4 jam telah dimulai.");
+        return;
+      }
+
+      // Klaim hasil sesi yang berjalan atau sudah selesai 4 jam
+      const earned = prog.accruedNusa;
+      if (earned < 0.0001) {
+        showToast("info", "Baru Dimulai", "Tunggu beberapa detik hingga koin NUSA terkumpul untuk diklaim.");
+        return;
+      }
+
+      if (state.isPreviewMode || !db || !state.currentUser) {
+        state.userData.balance = Number(state.userData.balance || 0) + earned;
+        state.userData.miningActive = true;
+        state.userData.miningStartTime = now;
+        renderAllSections();
+      } else {
+        await updateDoc(getUserDocRef(state.currentUser.uid), {
+          balance: increment(earned),
+          miningActive: true,
+          miningStartTime: now
+        });
+      }
+
+      showToast(
+        "success",
+        `+${earned.toFixed(4)} NUSA Diklaim!`,
+        "Hasil tambang masuk ke saldo utama & sesi 4 jam baru dimulai."
+      );
+    }
+
+    // =========================================================================
+    // [11. MONETISASI: TOMBOL BOOST IKLAN (DIRECT LINK / MODAL 15 DETIK)]
+    // =========================================================================
+    function triggerAdBoostFlow() {
+      const now = Date.now();
+      const elapsedSinceLastAd = Math.floor((now - (state.userData.lastAdTime || 0)) / 1000);
+      if (elapsedSinceLastAd < AD_CONFIG.adCooldownSec) {
+        const waitSec = AD_CONFIG.adCooldownSec - elapsedSinceLastAd;
+        showToast("info", "Jeda Anti-Spam Iklan", `Tunggu ${waitSec} detik lagi sebelum menonton iklan berikutnya.`);
+        return;
+      }
+
+      const activeDirectLink = (state.appSettings.directLinkUrl || "").trim();
+      const hasValidDirectLink =
+        activeDirectLink &&
+        !activeDirectLink.startsWith("ISI_") &&
+        activeDirectLink.startsWith("http");
+
+      // Jika URL Direct Link Adsterra/Monetag sudah diisi, buka di tab baru
+      if (hasValidDirectLink) {
+        window.open(activeDirectLink, "_blank", "noopener,noreferrer");
+      }
+
+      // Buka modal hitung mundur verifikasi 15 detik
+      openRewardedCountdownModal();
+    }
+
+    function openRewardedCountdownModal() {
+      const modal = document.getElementById("rewardedAdModal");
+      const claimBtn = document.getElementById("claimAdRewardBtn");
+      const claimText = document.getElementById("claimAdRewardBtnText");
+      const countdownEl = document.getElementById("adCountdownText");
+      const progressBar = document.getElementById("adProgressBar");
+
+      const rewardNusa = Number(state.appSettings.adRewardNusa) || 15;
+      const boostGh = Number(state.appSettings.adBoostGh) || 50;
+      document.getElementById("modalAdRewardLabel").textContent = `+${boostGh} GH/s & +${rewardNusa} NUSA`;
+
+      modal.classList.remove("hidden");
+      claimBtn.disabled = true;
+      claimBtn.className =
+        "w-full py-3.5 px-4 rounded-2xl font-extrabold text-xs sm:text-sm bg-slate-800 text-slate-500 cursor-not-allowed transition flex items-center justify-center gap-2";
+      progressBar.style.width = "0%";
+
+      let remaining = AD_CONFIG.adWatchSec;
+      countdownEl.textContent = `${remaining} detik tersisa`;
+      claimText.textContent = `Menunggu Selesai (${remaining}d)`;
+
+      if (state.adTimerInterval) clearInterval(state.adTimerInterval);
+
+      state.adTimerInterval = setInterval(() => {
+        remaining -= 1;
+        const pct = ((AD_CONFIG.adWatchSec - remaining) / AD_CONFIG.adWatchSec) * 100;
+        progressBar.style.width = `${Math.min(100, pct)}%`;
+
+        if (remaining > 0) {
+          countdownEl.textContent = `${remaining} detik tersisa`;
+          claimText.textContent = `Menunggu Selesai (${remaining}d)`;
+        } else {
+          clearInterval(state.adTimerInterval);
+          countdownEl.textContent = "Verifikasi Selesai!";
+          claimBtn.disabled = false;
+          claimBtn.className =
+            "w-full btn-primary-gradient py-3.5 px-4 rounded-2xl font-extrabold text-xs sm:text-sm text-slate-950 shadow-lg flex items-center justify-center gap-2 cursor-pointer";
+          claimText.textContent = `Klaim +${boostGh} GH/s & +${rewardNusa} NUSA`;
+        }
+      }, 1000);
+    }
+
+    async function claimCompletedAdBoost() {
+      const now = Date.now();
+      const today = getTodayStr();
+      const rewardNusa = Number(state.appSettings.adRewardNusa) || 15;
+      const boostGh = Number(state.appSettings.adBoostGh) || 50;
+      const currentBoosts = state.userData.adBoostDate === today ? (state.userData.adBoostsToday || 0) : 0;
+
+      document.getElementById("rewardedAdModal").classList.add("hidden");
+
+      if (state.isPreviewMode || !db || !state.currentUser) {
+        state.userData.balance = Number(state.userData.balance || 0) + rewardNusa;
+        state.userData.adBoostDate = today;
+        state.userData.adBoostsToday = currentBoosts + 1;
+        state.userData.lastAdTime = now;
+        if (!state.userData.miningActive) {
+          state.userData.miningActive = true;
+          state.userData.miningStartTime = now;
+        }
+        state.appSettings.totalAdImpressions = Number(state.appSettings.totalAdImpressions || 0) + 1;
+        renderAllSections();
+      } else {
+        const updates = {
+          balance: increment(rewardNusa),
+          adBoostDate: today,
+          adBoostsToday: currentBoosts + 1,
+          lastAdTime: now
+        };
+        if (!state.userData.miningActive) {
+          updates.miningActive = true;
+          updates.miningStartTime = now;
+        }
+        await updateDoc(getUserDocRef(state.currentUser.uid), updates);
+        await setDoc(getSettingsDocRef(), { totalAdImpressions: increment(1) }, { merge: true });
+      }
+
+      showToast(
+        "success",
+        "Boost Iklan Berhasil!",
+        `+${boostGh} GH/s aktif & +${rewardNusa} NUSA ditambahkan ke saldo Anda.`
+      );
+    }
+
+    // =========================================================================
+    // [12. TAB 2: ABSEN HARIAN, OFFERWALL, REFERRAL & TOKO RIG]
+    // =========================================================================
+    async function handleDailyCheckin() {
+      const today = getTodayStr();
+      if (state.userData.lastCheckinDate === today) {
+        showToast("info", "Sudah Absen Hari Ini", "Kembali besok untuk mengklaim +25 NUSA berikutnya.");
+        return;
+      }
+
+      const nextStreak = (Number(state.userData.checkinStreak) || 0) + 1;
+      if (state.isPreviewMode || !db || !state.currentUser) {
+        state.userData.balance = Number(state.userData.balance || 0) + 25;
+        state.userData.lastCheckinDate = today;
+        state.userData.checkinStreak = nextStreak;
+        renderAllSections();
+      } else {
+        await updateDoc(getUserDocRef(state.currentUser.uid), {
+          balance: increment(25),
+          lastCheckinDate: today,
+          checkinStreak: nextStreak
+        });
+      }
+
+      showToast("success", "Absen Harian Berhasil!", "+25.00 NUSA telah ditambahkan ke saldo Anda.");
+    }
+
+    async function handleSponsorOfferwall() {
+      const url = (AD_CONFIG.offerwallUrl || state.appSettings.directLinkUrl || "").trim();
+      if (url && !url.startsWith("ISI_") && url.startsWith("http")) {
+        window.open(url, "_blank", "noopener,noreferrer");
+      }
+
+      if (state.isPreviewMode || !db || !state.currentUser) {
+        state.userData.balance = Number(state.userData.balance || 0) + 40;
+        state.appSettings.totalAdImpressions = Number(state.appSettings.totalAdImpressions || 0) + 1;
+        renderAllSections();
+      } else {
+        await updateDoc(getUserDocRef(state.currentUser.uid), {
+          balance: increment(40)
+        });
+        await setDoc(getSettingsDocRef(), { totalAdImpressions: increment(1) }, { merge: true });
+      }
+
+      showToast("success", "Misi Sponsor Selesai!", "+40.00 NUSA dikreditkan ke saldo Anda.");
+    }
+
+    async function handleClaimReferralCode() {
+      if (state.userData.referredBy) {
+        showToast("info", "Sudah Diklaim", "Anda sudah pernah mengklaim kode undangan sebelumnya.");
+        return;
+      }
+
+      const inputCode = document.getElementById("friendReferralInput").value.trim().toUpperCase();
+      if (!inputCode || inputCode.length < 5) {
+        showToast("error", "Kode Tidak Valid", "Masukkan kode undangan teman yang benar (contoh: NUSA-8821).");
+        return;
+      }
+      if (inputCode === (state.userData.referralCode || "").toUpperCase()) {
+        showToast("error", "Tidak Bisa Kode Sendiri", "Gunakan kode undangan milik teman Anda.");
+        return;
+      }
+
+      if (state.isPreviewMode || !db || !state.currentUser) {
+        state.userData.balance = Number(state.userData.balance || 0) + 100;
+        state.userData.referredBy = inputCode;
+        renderAllSections();
+      } else {
+        await updateDoc(getUserDocRef(state.currentUser.uid), {
+          balance: increment(100),
+          referredBy: inputCode
+        });
+      }
+
+      showToast("success", "Bonus Referral +100 NUSA!", `Kode ${inputCode} berhasil diverifikasi.`);
+    }
+
+    async function handleBuyRig(rigId) {
+      const rig = RIG_CATALOG.find((r) => r.id === rigId);
+      if (!rig) return;
+
+      const ownedCount = Number((state.userData.ownedRigs || {})[rig.id] || 0);
+      const price = Math.round(rig.basePrice * Math.pow(1.35, ownedCount));
+
+      if (Number(state.userData.balance || 0) < price) {
+        showToast("error", "Saldo NUSA Tidak Cukup", `Butuh ${price} NUSA untuk membeli ${rig.name}.`);
+        return;
+      }
+
+      const updatedRigs = { ...(state.userData.ownedRigs || {}), [rig.id]: ownedCount + 1 };
+
+      if (state.isPreviewMode || !db || !state.currentUser) {
+        state.userData.balance = Number(state.userData.balance || 0) - price;
+        state.userData.hashrateGH = Number(state.userData.hashrateGH || 25) + rig.addGh;
+        state.userData.ownedRigs = updatedRigs;
+        renderAllSections();
+      } else {
+        await updateDoc(getUserDocRef(state.currentUser.uid), {
+          balance: increment(-price),
+          hashrateGH: increment(rig.addGh),
+          ownedRigs: updatedRigs
+        });
+      }
+
+      showToast("success", `${rig.name} Dibeli!`, `Kecepatan tambang permanen bertambah +${rig.addGh} GH/s.`);
+    }
+
+    // =========================================================================
+    // [13. TAB 3: PENARIKAN SALDO KE DANA & DOMPET WEB3]
+    // =========================================================================
+    function switchWithdrawMethod(method) {
+      state.withdrawMethod = method;
+      const btnDana = document.getElementById("methodBtn-DANA");
+      const btnWeb3 = document.getElementById("methodBtn-WEB3");
+      const fieldsDana = document.getElementById("withdrawFields-DANA");
+      const fieldsWeb3 = document.getElementById("withdrawFields-WEB3");
+      const submitBtnText = document.getElementById("withdrawSubmitBtnText");
+
+      if (method === "DANA") {
+        btnDana.className =
+          "py-2.5 px-3 rounded-xl font-bold text-xs flex items-center justify-center gap-2 bg-gradient-to-r from-emerald-500/25 to-cyan-500/25 text-white border border-cyan-400/40 transition";
+        btnWeb3.className =
+          "py-2.5 px-3 rounded-xl font-bold text-xs flex items-center justify-center gap-2 text-slate-400 hover:text-white transition";
+        fieldsDana.classList.remove("hidden");
+        fieldsWeb3.classList.add("hidden");
+        submitBtnText.textContent = "Tarik ke Saldo DANA Sekarang";
+      } else {
+        btnWeb3.className =
+          "py-2.5 px-3 rounded-xl font-bold text-xs flex items-center justify-center gap-2 bg-gradient-to-r from-indigo-500/25 to-cyan-500/25 text-white border border-indigo-400/40 transition";
+        btnDana.className =
+          "py-2.5 px-3 rounded-xl font-bold text-xs flex items-center justify-center gap-2 text-slate-400 hover:text-white transition";
+        fieldsWeb3.classList.remove("hidden");
+        fieldsDana.classList.add("hidden");
+        submitBtnText.textContent = "Kirim ke Dompet Web3 Sekarang";
+      }
+      updateWithdrawPreview();
+    }
+
+    function updateWithdrawPreview() {
+      const amt = parseFloat(document.getElementById("withdrawAmountInput").value) || 0;
+      const idrVal = amt * (Number(state.appSettings.nusaToIdr) || 100);
+      const usdtVal = idrVal / (Number(state.appSettings.usdtToIdr) || 16250);
+      const previewEl = document.getElementById("withdrawReceivePreview");
+
+      if (state.withdrawMethod === "DANA") {
+        previewEl.textContent = formatIdr(idrVal);
+      } else {
+        const net = document.getElementById("web3NetworkSelect").value.split(" ")[0];
+        previewEl.textContent = `${usdtVal.toFixed(4)} USDT (${net})`;
+      }
+    }
+
+    async function handleWithdrawSubmit() {
+      const amount = parseFloat(document.getElementById("withdrawAmountInput").value) || 0;
+      const currentBal = Number(state.userData.balance || 0);
+
+      if (amount <= 0) {
+        showToast("error", "Jumlah Tidak Valid", "Masukkan jumlah koin NUSA yang ingin ditarik.");
+        return;
+      }
+      if (amount > currentBal) {
+        showToast("error", "Saldo Tidak Cukup", "Jumlah penarikan melebihi saldo NUSA Anda.");
+        return;
+      }
+
+      const nusaToIdr = Number(state.appSettings.nusaToIdr) || 100;
+      const usdtToIdr = Number(state.appSettings.usdtToIdr) || 16250;
+      const minIdr = Number(state.appSettings.minWithdrawIdr) || 10000;
+      const idrValue = Math.round(amount * nusaToIdr);
+      const usdtValue = idrValue / usdtToIdr;
+
+      if (idrValue < minIdr) {
+        const minNusa = Math.ceil(minIdr / nusaToIdr);
+        showToast(
+          "error",
+          "Belum Mencapai Minimal Penarikan",
+          `Minimal penarikan adalah ${formatIdr(minIdr)} (${minNusa} NUSA).`
+        );
+        return;
+      }
+
+      let accountTarget = "";
+      let accountOwnerName = "";
+      let payoutLabel = formatIdr(idrValue);
+
+      if (state.withdrawMethod === "DANA") {
+        accountTarget = document.getElementById("danaPhoneInput").value.trim();
+        accountOwnerName = document.getElementById("danaNameInput").value.trim();
+        if (!accountTarget || accountTarget.length < 9) {
+          showToast("error", "Nomor DANA Tidak Valid", "Masukkan nomor HP DANA yang benar (08...).");
+          return;
+        }
+        if (!accountOwnerName) {
+          showToast("error", "Nama Pemilik Wajib Diisi", "Masukkan nama pemilik akun DANA Anda.");
+          return;
+        }
+      } else {
+        accountTarget = document.getElementById("web3AddressInput").value.trim();
+        accountOwnerName = document.getElementById("web3NetworkSelect").value;
+        payoutLabel = `${usdtValue.toFixed(4)} USDT`;
+        if (!accountTarget || accountTarget.length < 16) {
+          showToast("error", "Alamat Wallet Tidak Valid", "Tempel alamat dompet Solana atau EVM (0x...) yang valid.");
+          return;
+        }
+      }
+
+      const withdrawalPayload = {
+        uid: state.currentUser.uid,
+        userEmail: state.currentUser.email || "preview@nusamine.app",
+        userName: state.userData.displayName || "Penambang",
+        method: state.withdrawMethod,
+        accountTarget,
+        accountOwnerName,
+        nusaAmount: amount,
+        idrValue,
+        payoutLabel,
+        status: "pending",
+        createdAtMs: Date.now(),
+        createdAtStr: new Date().toLocaleString("id-ID", {
+          day: "2-digit",
+          month: "short",
+          hour: "2-digit",
+          minute: "2-digit"
+        })
+      };
+
+      if (state.isPreviewMode || !db || !state.currentUser) {
+        state.userData.balance = currentBal - amount;
+        state.withdrawals.unshift({ id: "WD-" + Date.now().toString().slice(-6), ...withdrawalPayload });
+        renderAllSections();
+      } else {
+        // Potong saldo secara atomik dan catat ke koleksi Firestore withdrawals
+        await updateDoc(getUserDocRef(state.currentUser.uid), {
+          balance: increment(-amount)
+        });
+        await addDoc(getWithdrawalsColRef(), withdrawalPayload);
+      }
+
+      document.getElementById("withdrawAmountInput").value = "";
+      updateWithdrawPreview();
+      showToast(
+        "success",
+        "Permintaan Penarikan Terkirim!",
+        `${payoutLabel} masuk antrean persetujuan Owner.`
+      );
+    }
+
+    // =========================================================================
+    // [14. TAB 4: PANEL OWNER (ADMIN KONTROL & APPROVAL)]
+    // =========================================================================
+    function handleUnlockOwner() {
+      const pin = document.getElementById("ownerPinInput").value.trim();
+      if (pin === OWNER_PIN) {
+        state.ownerUnlocked = true;
+        renderOwnerSection();
+        showToast("success", "Panel Owner Terbuka!", "Selamat datang di konsol kontrol pemilik aplikasi.");
+      } else {
+        showToast("error", "PIN Salah", "Masukkan PIN Owner yang benar (default: 123456).");
+      }
+    }
+
+    async function handleSaveOwnerSettings() {
+      const nusaToIdr = parseFloat(document.getElementById("cfgNusaToIdr").value);
+      const minWithdrawIdr = parseFloat(document.getElementById("cfgMinWithdrawIdr").value);
+      const adRewardNusa = parseFloat(document.getElementById("cfgAdRewardNusa").value);
+      const ecpmIdr = parseFloat(document.getElementById("cfgEcpmIdr").value);
+      const directLinkUrl = document.getElementById("cfgDirectLinkUrl").value.trim();
+
+      if (isNaN(nusaToIdr) || nusaToIdr <= 0 || isNaN(minWithdrawIdr) || minWithdrawIdr < 500) {
+        showToast("error", "Nilai Tidak Valid", "Pastikan kurs dan minimal penarikan lebih besar dari 0.");
+        return;
+      }
+
+      await patchGlobalSettings({
+        nusaToIdr,
+        minWithdrawIdr,
+        adRewardNusa: isNaN(adRewardNusa) ? 15 : adRewardNusa,
+        ecpmIdr: isNaN(ecpmIdr) ? 35000 : ecpmIdr,
+        directLinkUrl: directLinkUrl || AD_CONFIG.directLinkUrl
+      });
+
+      showToast("success", "Pengaturan Disimpan!", "Perubahan langsung diterapkan ke seluruh aplikasi.");
+    }
+
+    async function handleApproveWithdrawal(wdId) {
+      if (state.isPreviewMode || !db) {
+        const item = state.withdrawals.find((w) => w.id === wdId);
+        if (item) item.status = "approved";
+        renderAllSections();
+      } else {
+        await updateDoc(getWithdrawalDocRef(wdId), { status: "approved" });
+      }
+      showToast("success", "Penarikan Disetujui!", "Status penarikan diubah menjadi Sudah Dibayar.");
+    }
+
+    async function handleRejectAndRefundWithdrawal(wdId) {
+      const item = state.withdrawals.find((w) => w.id === wdId);
+      if (!item || item.status !== "pending") return;
+
+      if (state.isPreviewMode || !db) {
+        item.status = "rejected";
+        if (item.uid === state.currentUser.uid) {
+          state.userData.balance = Number(state.userData.balance || 0) + Number(item.nusaAmount || 0);
+        }
+        renderAllSections();
+      } else {
+        await updateDoc(getWithdrawalDocRef(wdId), { status: "rejected" });
+        await updateDoc(getUserDocRef(item.uid), {
+          balance: increment(Number(item.nusaAmount || 0))
+        });
+      }
+
+      showToast("info", "Penarikan Ditolak & Direfund", `${item.nusaAmount} NUSA dikembalikan ke saldo pengguna.`);
+    }
+
+    // =========================================================================
+    // [15. RENDERING UI REAL-TIME UNTUK SEMUA TAB]
+    // =========================================================================
+    function renderAllSections() {
+      renderHeaderAndMining();
+      renderMissionsAndRigs();
+      renderWalletSection();
+      renderOwnerSection();
+      lucide.createIcons();
+    }
+
+    function renderHeaderAndMining() {
+      const now = Date.now();
+      const prog = computeMiningProgress(now);
+      const totalNusa = Number(state.userData.balance || 0) + prog.accruedNusa;
+      const nusaToIdr = Number(state.appSettings.nusaToIdr) || 100;
+      const usdtToIdr = Number(state.appSettings.usdtToIdr) || 16250;
+
+      const totalIdr = totalNusa * nusaToIdr;
+      const totalUsdt = totalIdr / usdtToIdr;
+      const effectiveGh = getEffectiveHashrate();
+      const hourlyNusa = getHourlyYieldNusa();
+
+      // Header Profil
+      const u = state.currentUser || { displayName: "Penambang", photoURL: "" };
+      document.getElementById("headerUserName").textContent = u.displayName || "Penambang Nusa";
+      const avatarInner = document.getElementById("userAvatarInner");
+      if (u.photoURL) {
+        avatarInner.innerHTML = `<img src="${u.photoURL}" alt="Avatar" class="w-full h-full object-cover" />`;
+      } else {
+        const initials = (u.displayName || "NM").slice(0, 2).toUpperCase();
+        avatarInner.textContent = initials;
+      }
+
+      const statusBadge = document.getElementById("cloudStatusBadge");
+      const statusDot = document.getElementById("cloudStatusDot");
+      if (state.isPreviewMode) {
+        statusBadge.textContent = "Mode Preview Lokal";
+        statusBadge.className = "font-mono text-[10px] text-indigo-300 truncate";
+        statusDot.className = "w-1.5 h-1.5 rounded-full bg-indigo-400";
+      } else {
+        statusBadge.textContent = "Cloud Terhubung";
+        statusBadge.className = "font-mono text-[10px] text-emerald-300 truncate";
+        statusDot.className = "w-1.5 h-1.5 rounded-full bg-emerald-400";
+      }
+
+      // Header & Reaktor Counters
+      document.getElementById("headerNusaBalance").textContent = `${totalNusa.toFixed(4)} NUSA`;
+      document.getElementById("headerIdrBalance").textContent = `≈ ${formatIdr(totalIdr)}`;
+      document.getElementById("liveNusaCounter").textContent = totalNusa.toFixed(6);
+      document.getElementById("liveIdrEstimate").textContent = `≈ ${formatIdr(totalIdr)}`;
+      document.getElementById("liveUsdtEstimate").textContent = `≈ $${totalUsdt.toFixed(4)} USDT`;
+
+      // Animasi Reaktor & Status Sesi
+      const mDot = document.getElementById("miningStatusDot");
+      const mLabel = document.getElementById("miningStatusLabel");
+      const outerRing = document.getElementById("reactorOuterRing");
+      const innerRing = document.getElementById("reactorInnerRing");
+      const coreGroup = document.getElementById("reactorCoreGroup");
+      const timerDisplay = document.getElementById("sessionTimerDisplay");
+      const mainActionText = document.getElementById("mainMiningActionText");
+
+      if (prog.isRunning) {
+        mDot.className = "w-2.5 h-2.5 rounded-full bg-emerald-400 animate-ping";
+        mLabel.textContent = "REAKTOR AKTIF";
+        mLabel.className = "text-xs font-extrabold uppercase tracking-wider text-emerald-400";
+        outerRing.classList.remove("reactor-paused");
+        innerRing.classList.remove("reactor-paused");
+        coreGroup.classList.remove("reactor-paused");
+        timerDisplay.textContent = formatHMS(prog.remainingMs);
+        mainActionText.textContent = `Klaim Hasil (+${prog.accruedNusa.toFixed(4)} NUSA)`;
+      } else if (prog.isCompleted) {
+        mDot.className = "w-2.5 h-2.5 rounded-full bg-cyan-400";
+        mLabel.textContent = "SESI 4 JAM SELESAI";
+        mLabel.className = "text-xs font-extrabold uppercase tracking-wider text-cyan-300";
+        outerRing.classList.add("reactor-paused");
+        innerRing.classList.add("reactor-paused");
+        coreGroup.classList.add("reactor-paused");
+        timerDisplay.textContent = "00:00:00";
+        mainActionText.textContent = `Klaim +${prog.accruedNusa.toFixed(2)} NUSA & Mulai Baru`;
+      } else {
+        mDot.className = "w-2.5 h-2.5 rounded-full bg-slate-500";
+        mLabel.textContent = "STANDBY";
+        mLabel.className = "text-xs font-extrabold uppercase tracking-wider text-slate-300";
+        outerRing.classList.add("reactor-paused");
+        innerRing.classList.add("reactor-paused");
+        coreGroup.classList.add("reactor-paused");
+        timerDisplay.textContent = "04:00:00";
+        mainActionText.textContent = "Mulai Tambang 4 Jam";
+      }
+
+      document.getElementById("reactorHashrateSvgText").textContent = `${effectiveGh.toFixed(1)} GH/s`;
+      document.getElementById("statBaseHashrate").textContent = `${Number(state.userData.hashrateGH || 25).toFixed(1)} GH/s`;
+      document.getElementById("statSessionAccrued").textContent = `+${prog.accruedNusa.toFixed(4)}`;
+      document.getElementById("statHourlyRate").textContent = `+${hourlyNusa.toFixed(2)} NUSA`;
+
+      // Badge Ad Boost & Cooldown Tombol Iklan
+      const today = getTodayStr();
+      const boostsToday = state.userData.adBoostDate === today ? (state.userData.adBoostsToday || 0) : 0;
+      const boostBadge = document.getElementById("adBoostCountBadge");
+      if (boostsToday > 0) {
+        boostBadge.classList.remove("hidden");
+        boostBadge.textContent = `+${boostsToday * (Number(state.appSettings.adBoostGh) || 50)} GH/s Boost`;
+      } else {
+        boostBadge.classList.add("hidden");
+      }
+
+      const adBtn = document.getElementById("watchAdBoostBtn");
+      const adBtnText = document.getElementById("watchAdBoostText");
+      const elapsedAdSec = Math.floor((now - (state.userData.lastAdTime || 0)) / 1000);
+      const rewardNusa = Number(state.appSettings.adRewardNusa) || 15;
+      const boostGh = Number(state.appSettings.adBoostGh) || 50;
+
+      if (elapsedAdSec < AD_CONFIG.adCooldownSec) {
+        adBtn.disabled = true;
+        adBtnText.textContent = `Jeda Anti-Spam (${AD_CONFIG.adCooldownSec - elapsedAdSec}d)`;
+      } else {
+        adBtn.disabled = false;
+        adBtnText.textContent = `Boost +${boostGh} GH/s & +${rewardNusa} NUSA (Tonton Iklan)`;
+      }
+    }
+
+    function renderMissionsAndRigs() {
+      const today = getTodayStr();
+      document.getElementById("checkinStreakBadge").textContent = `Streak: ${state.userData.checkinStreak || 0} Hari`;
+
+      const checkinBtn = document.getElementById("dailyCheckinBtn");
+      if (state.userData.lastCheckinDate === today) {
+        checkinBtn.disabled = true;
+        checkinBtn.className = "px-3.5 py-2 rounded-xl font-bold text-xs bg-slate-800 text-slate-400 cursor-not-allowed shrink-0";
+        checkinBtn.textContent = "Sudah Absen";
+      } else {
+        checkinBtn.disabled = false;
+        checkinBtn.className = "btn-primary-gradient px-3.5 py-2 rounded-xl font-bold text-xs text-slate-950 shrink-0";
+        checkinBtn.textContent = "Klaim +25";
+      }
+
+      // Referral
+      const refCode = state.userData.referralCode || "NUSA-0000";
+      document.getElementById("myReferralCodeText").textContent = refCode;
+      const shareOrigin = window.location.origin && window.location.origin !== "null" ? window.location.origin + window.location.pathname : "https://nusamine.app/";
+      document.getElementById("myReferralLinkInput").value = `${shareOrigin}?ref=${refCode}`;
+      document.getElementById("referralCountBadge").textContent = `${state.userData.referralCount || 0} Teman`;
+
+      const claimBox = document.getElementById("claimReferralBox");
+      if (state.userData.referredBy) {
+        claimBox.innerHTML = `
+          <div class="text-xs text-emerald-300 font-semibold flex items-center gap-2">
+            <i data-lucide="check-circle-2" class="w-4 h-4"></i>
+            <span>Kode undangan <strong class="font-mono">${state.userData.referredBy}</strong> sudah diklaim (+100 NUSA).</span>
+          </div>
+        `;
+      }
+
+      // Toko 4 Rig Permanen
+      const storeEl = document.getElementById("rigStoreList");
+      const currentBal = Number(state.userData.balance || 0);
+
+      storeEl.innerHTML = RIG_CATALOG.map((rig) => {
+        const owned = Number((state.userData.ownedRigs || {})[rig.id] || 0);
+        const price = Math.round(rig.basePrice * Math.pow(1.35, owned));
+        const affordable = currentBal >= price;
+
+        return `
+          <div class="glass-inner rounded-2xl p-4 space-y-3">
+            <div class="flex items-start gap-3">
+              <div class="w-10 h-10 rounded-xl border ${rig.badgeClass} flex items-center justify-center shrink-0 mt-0.5">
+                <i data-lucide="${rig.icon}" class="w-5 h-5"></i>
+              </div>
+              <div class="min-w-0 flex-1">
+                <div class="flex items-center justify-between gap-2">
+                  <h4 class="font-bold text-xs sm:text-sm text-white truncate">${rig.name}</h4>
+                  <span class="px-2 py-0.5 rounded-full font-mono text-[10px] font-bold bg-white/10 text-cyan-300 shrink-0">Dimiliki: ${owned}</span>
+                </div>
+                <p class="text-[11px] text-slate-400 mt-0.5 leading-snug">${rig.desc}</p>
+                <div class="font-mono text-[11px] font-bold text-emerald-400 mt-1">
+                  +${rig.addGh} GH/s Permanen (+${(rig.addGh * 0.4).toFixed(1)} NUSA/jam)
+                </div>
+              </div>
+            </div>
+
+            <button type="button" data-buy-rig="${rig.id}"
+              class="buy-rig-btn w-full py-2.5 px-4 rounded-xl font-bold text-xs flex items-center justify-between transition ${affordable ? "btn-primary-gradient text-slate-950" : "bg-slate-800/90 text-slate-400 border border-white/10 hover:bg-slate-800"}">
+              <span>Beli Unit Tambahan</span>
+              <span class="font-mono font-extrabold">${price.toLocaleString("en-US")} NUSA</span>
+            </button>
+          </div>
+        `;
+      }).join("");
+    }
+
+    function renderWalletSection() {
+      const bal = Number(state.userData.balance || 0);
+      const nusaToIdr = Number(state.appSettings.nusaToIdr) || 100;
+      const usdtToIdr = Number(state.appSettings.usdtToIdr) || 16250;
+      const minIdr = Number(state.appSettings.minWithdrawIdr) || 10000;
+
+      const idrVal = bal * nusaToIdr;
+      const usdtVal = idrVal / usdtToIdr;
+
+      document.getElementById("walletNusaDisplay").textContent = bal.toFixed(4);
+      document.getElementById("walletIdrDisplay").textContent = `≈ ${formatIdr(idrVal)}`;
+      document.getElementById("walletUsdtDisplay").textContent = `≈ $${usdtVal.toFixed(4)} USDT`;
+      document.getElementById("walletLiveRateBadge").textContent = `1 NUSA = ${formatIdr(nusaToIdr)}`;
+
+      const pct = Math.min(100, (idrVal / minIdr) * 100);
+      document.getElementById("minWithdrawProgressText").textContent = `${formatIdr(idrVal)} / ${formatIdr(minIdr)}`;
+      document.getElementById("minWithdrawProgressBar").style.width = `${pct}%`;
+
+      updateWithdrawPreview();
+
+      // Filter riwayat milik user aktif
+      const myUid = state.currentUser ? state.currentUser.uid : "";
+      const myList = state.withdrawals.filter((w) => w.uid === myUid);
+      document.getElementById("userWithdrawCountBadge").textContent = `${myList.length} Riwayat`;
+
+      const listEl = document.getElementById("userWithdrawalHistoryList");
+      if (myList.length === 0) {
+        listEl.innerHTML = `
+          <div class="glass-inner rounded-2xl p-5 text-center text-xs text-slate-400">
+            Belum ada riwayat penarikan. Kumpulkan saldo NUSA dan ajukan pencairan pertama Anda!
+          </div>
+        `;
+        return;
+      }
+
+      listEl.innerHTML = myList.map((wd) => {
+        let statusLabel = "Pending";
+        let statusClass = "bg-indigo-500/20 text-indigo-300 border-indigo-500/35";
+        if (wd.status === "approved") {
+          statusLabel = "Sudah Dibayar";
+          statusClass = "bg-emerald-500/20 text-emerald-300 border-emerald-500/35";
+        } else if (wd.status === "rejected") {
+          statusLabel = "Ditolak (Refund)";
+          statusClass = "bg-rose-500/20 text-rose-300 border-rose-500/35";
+        }
+
+        const shortTarget =
+          wd.accountTarget.length > 16
+            ? `${wd.accountTarget.slice(0, 6)}...${wd.accountTarget.slice(-4)}`
+            : wd.accountTarget;
+
+        return `
+          <div class="glass-inner rounded-2xl p-3.5 flex items-center justify-between gap-3">
+            <div class="min-w-0">
+              <div class="flex items-center gap-2">
+                <span class="px-1.5 py-0.5 rounded text-[10px] font-mono font-bold bg-white/10 text-cyan-300">${wd.method}</span>
+                <span class="font-bold text-xs text-white truncate">${wd.accountOwnerName}</span>
+              </div>
+              <div class="font-mono text-[11px] text-slate-400 mt-1 truncate">${shortTarget} • ${wd.createdAtStr || ""}</div>
+            </div>
+            <div class="text-right shrink-0">
+              <div class="font-mono font-extrabold text-xs text-emerald-400">${wd.payoutLabel}</div>
+              <span class="inline-block mt-1 px-2 py-0.5 rounded-full text-[10px] font-bold border ${statusClass}">
+                ${statusLabel}
+              </span>
+            </div>
+          </div>
+        `;
+      }).join("");
+    }
+
+    function renderOwnerSection() {
+      const pendingCount = state.withdrawals.filter((w) => w.status === "pending").length;
+      const navDot = document.getElementById("navOwnerPendingDot");
+      if (pendingCount > 0) navDot.classList.remove("hidden");
+      else navDot.classList.add("hidden");
+
+      const gateEl = document.getElementById("ownerLockGate");
+      const contentEl = document.getElementById("ownerDashboardContent");
+
+      if (!state.ownerUnlocked) {
+        gateEl.classList.remove("hidden");
+        contentEl.classList.add("hidden");
+        return;
+      }
+
+      gateEl.classList.add("hidden");
+      contentEl.classList.remove("hidden");
+
+      // Kalkulator Profitabilitas Owner
+      const impressions = Number(state.appSettings.totalAdImpressions || 0);
+      const ecpm = Number(state.appSettings.ecpmIdr || 35000);
+      const grossRevenueIdr = (impressions / 1000) * ecpm;
+
+      const totalLiabilityIdr = state.withdrawals
+        .filter((w) => w.status === "pending" || w.status === "approved")
+        .reduce((sum, w) => sum + Number(w.idrValue || 0), 0);
+
+      const netProfitIdr = grossRevenueIdr - totalLiabilityIdr;
+
+      document.getElementById("ownerTotalImpressions").textContent = impressions.toLocaleString("id-ID");
+      document.getElementById("ownerGrossAdRevenue").textContent = formatIdr(grossRevenueIdr);
+      document.getElementById("ownerEcpmSubtitle").textContent = `eCPM: ${formatIdr(ecpm)} / 1K`;
+      document.getElementById("ownerTotalLiability").textContent = formatIdr(totalLiabilityIdr);
+      document.getElementById("ownerNetProfit").textContent = formatIdr(netProfitIdr);
+
+      const healthEl = document.getElementById("ownerProfitHealth");
+      if (netProfitIdr >= 0) {
+        healthEl.textContent = "Margin Profit Positif";
+        healthEl.className = "text-[10px] text-emerald-400 mt-0.5";
+      } else {
+        healthEl.textContent = "Perlu Penyesuaian Kurs / eCPM";
+        healthEl.className = "text-[10px] text-rose-400 mt-0.5";
+      }
+
+      // Isi form pengaturan hanya jika user tidak sedang mengetik di dalamnya
+      const activeId = document.activeElement ? document.activeElement.id : "";
+      if (activeId !== "cfgNusaToIdr") document.getElementById("cfgNusaToIdr").value = state.appSettings.nusaToIdr;
+      if (activeId !== "cfgMinWithdrawIdr") document.getElementById("cfgMinWithdrawIdr").value = state.appSettings.minWithdrawIdr;
+      if (activeId !== "cfgAdRewardNusa") document.getElementById("cfgAdRewardNusa").value = state.appSettings.adRewardNusa;
+      if (activeId !== "cfgEcpmIdr") document.getElementById("cfgEcpmIdr").value = state.appSettings.ecpmIdr;
+      if (activeId !== "cfgDirectLinkUrl") document.getElementById("cfgDirectLinkUrl").value = state.appSettings.directLinkUrl || "";
+
+      // Render Antrean Penarikan User
+      document.getElementById("ownerPendingWithdrawBadge").textContent = `${pendingCount} Pending`;
+      const queueEl = document.getElementById("ownerWithdrawalQueueList");
+
+      if (state.withdrawals.length === 0) {
+        queueEl.innerHTML = `
+          <div class="glass-inner rounded-2xl p-5 text-center text-xs text-slate-400">
+            Belum ada permintaan penarikan dari pengguna.
+          </div>
+        `;
+        return;
+      }
+
+      queueEl.innerHTML = state.withdrawals.map((wd) => {
+        const isPending = wd.status === "pending";
+        let badge = `<span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-indigo-500/20 text-indigo-300">Pending</span>`;
+        if (wd.status === "approved") {
+          badge = `<span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-500/20 text-emerald-300">Sudah Dibayar</span>`;
+        } else if (wd.status === "rejected") {
+          badge = `<span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-rose-500/20 text-rose-300">Ditolak</span>`;
+        }
+
+        return `
+          <div class="glass-inner rounded-2xl p-3.5 space-y-2.5">
+            <div class="flex items-start justify-between gap-2">
+              <div class="min-w-0">
+                <div class="flex items-center gap-2">
+                  <span class="px-1.5 py-0.5 rounded text-[10px] font-mono font-bold bg-cyan-500/20 text-cyan-300">${wd.method}</span>
+                  <span class="font-bold text-xs text-white truncate">${wd.userName || "User"} (${wd.userEmail})</span>
+                </div>
+                <div class="flex items-center gap-2 mt-1.5">
+                  <span class="font-mono text-xs font-bold text-emerald-300 truncate">${wd.accountTarget}</span>
+                  <button type="button" data-copy-target="${wd.accountTarget}"
+                    class="copy-wd-target-btn px-2 py-0.5 rounded bg-white/10 hover:bg-white/20 text-[10px] font-bold text-white shrink-0">
+                    Salin Nomor
+                  </button>
+                </div>
+                <div class="text-[11px] text-slate-400 mt-1">
+                  A/N: <strong class="text-slate-200">${wd.accountOwnerName}</strong> • <strong class="font-mono text-emerald-400">${wd.payoutLabel}</strong> (${wd.nusaAmount} NUSA)
+                </div>
+              </div>
+              ${badge}
+            </div>
+
+            ${
+              isPending
+                ? `
+              <div class="grid grid-cols-2 gap-2 pt-1">
+                <button type="button" data-approve-wd="${wd.id}"
+                  class="approve-wd-btn btn-primary-gradient py-2 px-3 rounded-xl font-extrabold text-xs text-slate-950">
+                  Setujui (Sudah Dibayar)
+                </button>
+                <button type="button" data-reject-wd="${wd.id}"
+                  class="reject-wd-btn py-2 px-3 rounded-xl font-bold text-xs bg-rose-500/15 hover:bg-rose-500/25 text-rose-300 border border-rose-500/30 transition">
+                  Tolak & Refund Saldo
+                </button>
+              </div>
+            `
+                : ""
+            }
+          </div>
+        `;
+      }).join("");
+    }
+
+    // =========================================================================
+    // [16. NAVIGASI TAB & EVENT LISTENERS]
+    // =========================================================================
+    function switchMainTab(tabId) {
+      state.activeTab = tabId;
+      document.querySelectorAll(".tab-panel").forEach((el) => el.classList.add("hidden"));
+      document.getElementById(`panel-${tabId}`).classList.remove("hidden");
+
+      document.querySelectorAll(".nav-tab-btn").forEach((btn) => {
+        btn.className =
+          "nav-tab-btn flex flex-col items-center justify-center py-1.5 px-1 rounded-xl text-slate-400 hover:text-white border border-transparent transition relative";
+      });
+
+      const activeBtn = document.getElementById(`navBtn-${tabId}`);
+      activeBtn.className =
+        "nav-tab-btn flex flex-col items-center justify-center py-1.5 px-1 rounded-xl text-emerald-400 bg-emerald-500/15 border border-emerald-500/30 transition relative";
+
+      renderAllSections();
+    }
+
+    // Event Delegation & Bindings
+    document.getElementById("googleLoginBtn").addEventListener("click", handleGoogleLogin);
+    document.getElementById("authTabLogin").addEventListener("click", () => switchAuthFormTab(false));
+    document.getElementById("authTabRegister").addEventListener("click", () => switchAuthFormTab(true));
+    document.getElementById("emailAuthForm").addEventListener("submit", handleEmailAuthSubmit);
+    document.getElementById("enterPreviewModeBtn").addEventListener("click", activatePreviewMode);
+    document.getElementById("logoutBtn").addEventListener("click", handleLogout);
+
+    document.getElementById("mainMiningActionBtn").addEventListener("click", handleMainMiningAction);
+    document.getElementById("watchAdBoostBtn").addEventListener("click", triggerAdBoostFlow);
+    document.getElementById("claimAdRewardBtn").addEventListener("click", claimCompletedAdBoost);
+
+    document.getElementById("bannerAdFallbackCard").addEventListener("click", async () => {
+      await patchGlobalSettings({ totalAdImpressions: Number(state.appSettings.totalAdImpressions || 0) + 1 });
+      showToast("info", "Impresi Banner Tercatat!", "Statistik tayangan di Panel Owner bertambah +1.");
+    });
+
+    document.getElementById("dailyCheckinBtn").addEventListener("click", handleDailyCheckin);
+    document.getElementById("sponsorMissionBtn").addEventListener("click", handleSponsorOfferwall);
+    document.getElementById("copyReferralBtn").addEventListener("click", () => {
+      copyTextSafe(document.getElementById("myReferralLinkInput").value, "Tautan Referral");
+    });
+    document.getElementById("claimReferralBtn").addEventListener("click", handleClaimReferralCode);
+
+    // Delegasi Klik Beli Rig
+    document.getElementById("rigStoreList").addEventListener("click", (e) => {
+      const btn = e.target.closest(".buy-rig-btn");
+      if (btn) handleBuyRig(btn.getAttribute("data-buy-rig"));
+    });
+
+    // Penarikan DANA & Web3
+    document.getElementById("methodBtn-DANA").addEventListener("click", () => switchWithdrawMethod("DANA"));
+    document.getElementById("methodBtn-WEB3").addEventListener("click", () => switchWithdrawMethod("WEB3"));
+    document.getElementById("web3NetworkSelect").addEventListener("change", updateWithdrawPreview);
+    document.getElementById("withdrawAmountInput").addEventListener("input", updateWithdrawPreview);
+
+    document.querySelectorAll(".wd-pct-btn").forEach((btn) => {
+      btn.addEventListener("click", () => {
+        const pct = parseFloat(btn.getAttribute("data-pct"));
+        const bal = Number(state.userData.balance || 0);
+        document.getElementById("withdrawAmountInput").value = bal > 0 ? (bal * pct).toFixed(2) : "";
+        updateWithdrawPreview();
+      });
+    });
+
+    document.getElementById("submitWithdrawBtn").addEventListener("click", handleWithdrawSubmit);
+
+    // Panel Owner Events
+    document.getElementById("unlockOwnerBtn").addEventListener("click", handleUnlockOwner);
+    document.getElementById("saveOwnerSettingsBtn").addEventListener("click", handleSaveOwnerSettings);
+    document.getElementById("copySecurityRulesBtn").addEventListener("click", () => {
+      copyTextSafe(document.getElementById("firestoreRulesCode").textContent, "Firestore Security Rules");
+    });
+
+    document.getElementById("ownerWithdrawalQueueList").addEventListener("click", (e) => {
+      const copyBtn = e.target.closest(".copy-wd-target-btn");
+      if (copyBtn) {
+        copyTextSafe(copyBtn.getAttribute("data-copy-target"), "Nomor Tujuan");
+        return;
+      }
+      const approveBtn = e.target.closest(".approve-wd-btn");
+      if (approveBtn) {
+        handleApproveWithdrawal(approveBtn.getAttribute("data-approve-wd"));
+        return;
+      }
+      const rejectBtn = e.target.closest(".reject-wd-btn");
+      if (rejectBtn) {
+        handleRejectAndRefundWithdrawal(rejectBtn.getAttribute("data-reject-wd"));
+      }
+    });
+
+    // Navigasi Bawah & Quick Jump
+    document.querySelectorAll(".nav-tab-btn").forEach((btn) => {
+      btn.addEventListener("click", () => switchMainTab(btn.getAttribute("data-tab")));
+    });
+    document.querySelectorAll(".nav-jump-btn").forEach((btn) => {
+      btn.addEventListener("click", () => switchMainTab(btn.getAttribute("data-nav")));
+    });
+
+    // Ticker UI Real-Time setiap 250ms untuk kelancaran penghitung koin & timer
+    setInterval(() => {
+      if (state.currentUser) {
+        renderHeaderAndMining();
+      }
+    }, 250);
+
+    // =========================================================================
+    // [17. BOOTSTRAP FIREBASE & AUTH STATE LISTENER]
+    // =========================================================================
+    async function bootstrapApp() {
+      lucide.createIcons();
+
+      if (!activeFirebaseConfig) {
+        // Jika FIREBASE_CONFIG belum diisi, tampilkan banner informasi Mode Preview
+        document.getElementById("previewModeTopBanner").classList.remove("hidden");
+        return;
+      }
+
+      try {
+        firebaseApp = initializeApp(activeFirebaseConfig);
+        auth = getAuth(firebaseApp);
+        db = getFirestore(firebaseApp);
+
+        // Jika environment menyuntikkan custom auth token, login terlebih dahulu
+        if (typeof __initial_auth_token !== "undefined" && __initial_auth_token) {
+          await signInWithCustomToken(auth, __initial_auth_token);
+        }
+
+        onAuthStateChanged(auth, async (user) => {
+          if (user) {
+            state.isPreviewMode = false;
+            state.currentUser = {
+              uid: user.uid,
+              email: user.email || "",
+              displayName: user.displayName || (user.email ? user.email.split("@")[0] : "Penambang Nusa"),
+              photoURL: user.photoURL || ""
+            };
+            await ensureGlobalSettingsDocument();
+            await ensureUserDocument(user);
+            attachFirestoreListeners(user.uid);
+            enterAppUI();
+          } else if (!state.isPreviewMode) {
+            detachFirestoreListeners();
+            document.getElementById("mainAppWrapper").classList.add("hidden");
+            document.getElementById("authScreen").classList.remove("hidden");
+          }
+        });
+      } catch (err) {
+        console.error("Firebase init error:", err);
+        document.getElementById("previewModeTopBanner").classList.remove("hidden");
+      }
+    }
+
+    window.addEventListener("DOMContentLoaded", bootstrapApp);
+  </script>
+</body>
+</html>
